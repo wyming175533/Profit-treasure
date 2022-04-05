@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: micro-web
+    thymelaf:
+      cache: false
+
+server:
+  port: 8080
+  servlet:
+    context-path: /ylb
+
+dubbo:
+  registry:
+    address: zookeeper://localhost:2181
+  scan:
+    base-packages: com.bjppowernode.microweb
+  consumer:
+    timeout: 30000
+    check: false
+    retires: 0
