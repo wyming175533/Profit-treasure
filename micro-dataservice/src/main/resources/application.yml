@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: micr-dataservice
+#    mysql
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/ylb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: root
+    password: root
+#    redis
+  redis:
+    host: 192.168.17.129
+    port: 6379
+
+#    dubbo
+dubbo:
+  registry:
+    address: zookeeper://localhost:2181
+  scan:
+    base-packages: com.bjpowernode.dataservice.service
+  provider:
+    timeout: 30000
+    retries: 0
+
+#  mybatis
+mybatis:
+  mapper-locations: classpath:/mappers/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
