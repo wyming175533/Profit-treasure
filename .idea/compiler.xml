@@ -9,10 +9,12 @@
         <module name="micro-web" />
         <module name="micro-api" />
         <module name="micro-dataservice" />
+        <module name="micro-common" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="micro-api" target="1.8" />
+      <module name="micro-common" target="1.8" />
       <module name="micro-dataservice" target="1.8" />
       <module name="micro-parent" target="1.8" />
       <module name="micro-web" target="1.8" />
@@ -22,6 +24,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="micro-api" options="-parameters" />
+      <module name="micro-common" options="-parameters" />
       <module name="micro-dataservice" options="-parameters" />
       <module name="micro-web" options="-parameters" />
     </option>

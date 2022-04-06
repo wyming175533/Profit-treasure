@@ -22,6 +22,7 @@
             <module>../micro-api</module>
             <module>../micro-dataservice</module>
             <module>../micro-web</module>
+            <module>../micro-common</module>
         </modules>
 
         <!--定义版本-->

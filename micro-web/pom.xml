@@ -18,6 +18,16 @@
 		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
+<!--		redis-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.bjpowernode</groupId>
+			<artifactId>micro-common</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 		<dependency>
 			<artifactId>micro-api</artifactId>
 			<groupId>com.bjpowernode</groupId>
