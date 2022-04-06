@@ -1,9 +1,11 @@
 package com.bjpowernode.api.po;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class BidInfo {
+public class BidInfo implements Serializable {
+    private static final long serialVersionUID = -1041108312243481202L;
     private Integer id;
 
     private Integer loanId;

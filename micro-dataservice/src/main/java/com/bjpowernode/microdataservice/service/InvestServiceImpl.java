@@ -11,6 +11,10 @@ import java.math.BigDecimal;
 public class InvestServiceImpl  implements InvestService {
     @Resource
     private IncomeRecordMapper incomeRecordMapper;
+
+    /**
+     * @return 返回成交金额总数
+     */
     @Override
     public BigDecimal statisticsInvestSumAllMoney() {
         return incomeRecordMapper.selectStatisticsInvestSumAllMoney();

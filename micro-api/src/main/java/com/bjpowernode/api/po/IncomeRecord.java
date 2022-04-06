@@ -1,9 +1,11 @@
 package com.bjpowernode.api.po;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class IncomeRecord {
+public class IncomeRecord implements Serializable {
+    private static final long serialVersionUID = 4064592268404332717L;
     private Integer id;
 
     private Integer uid;

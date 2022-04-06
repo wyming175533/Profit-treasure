@@ -17,6 +17,28 @@
     <result column="product_full_time" jdbcType="TIMESTAMP" property="productFullTime" />
     <result column="product_desc" jdbcType="VARCHAR" property="productDesc" />
   </resultMap>
+<!--  自定义sql开始-->
+  <select id="selectCompetAvgRate" resultType="java.math.BigDecimal">
+    select ROUND(avg(rate),2) from b_product_info
+
+  </select>
+
+
+  <select id="selectListByType" resultMap="BaseResultMap">
+
+    select     <include refid="Base_Column_List" />
+    from b_product_info
+    where product_type=#{ProductType}
+     ORDER BY release_time desc limit #{offset},#{rows};
+  </select>
+
+
+
+
+
+
+
+<!--  自定义sql结束-->
   <sql id="Base_Column_List">
     id, product_name, rate, cycle, release_time, product_type, product_no, product_money, 
     left_product_money, bid_min_limit, bid_max_limit, product_status, product_full_time, 
@@ -28,6 +50,8 @@
     from b_product_info
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from b_product_info
     where id = #{id,jdbcType=INTEGER}

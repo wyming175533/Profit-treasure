@@ -1,8 +1,10 @@
 package com.bjpowernode.api.po;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class FinanceAccount {
+public class FinanceAccount implements Serializable {
+    private static final long serialVersionUID = 8576132603092951698L;
     private Integer id;
 
     private Integer uid;

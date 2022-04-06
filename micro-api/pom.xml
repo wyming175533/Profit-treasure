@@ -12,6 +12,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>micro-api</artifactId>
+    <dependencies>
+
+    </dependencies>
 
 
 </project>
