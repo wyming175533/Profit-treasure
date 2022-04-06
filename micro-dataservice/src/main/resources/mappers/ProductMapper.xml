@@ -32,6 +32,9 @@
      ORDER BY release_time desc limit #{offset},#{rows};
   </select>
 
+  <select id="selectRecordsCount" resultType="java.lang.Integer">
+    select count(id) from b_product_info where product_type=#{ProductType}
+  </select>
 
 
 

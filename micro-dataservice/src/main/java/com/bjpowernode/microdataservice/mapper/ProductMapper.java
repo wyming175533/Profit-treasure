@@ -29,4 +29,6 @@ public interface ProductMapper {
     int updateByPrimaryKeySelective(Product record);
 
     int updateByPrimaryKey(Product record);
+
+    Integer selectRecordsCount(Integer ptype);
 }

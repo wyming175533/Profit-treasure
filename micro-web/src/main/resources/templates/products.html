@@ -47,7 +47,7 @@
 					</div>
 				</div>
 				<div class="pro-btn">
-					<a th:href="@{/loan/loanInfo}" class="btn-1">立即投资</a><!--已满标按钮-->
+					<a th:href="@{/product/productInfo}" class="btn-1">立即投资</a><!--已满标按钮-->
 				</div>
 			</div>
 		</div >
@@ -60,11 +60,25 @@
 		<tbody>
 		<tr>
 			<td>
-				共20条3页　当前为第2页　
-				<a id="linkHomePage" th:href="@{/loan/loan}">首页</a>
-				<a id="linkPreviousPage" th:href="@{/loan/loan}">上一页</a>
-				<a id="linkNextPage" th:href="@{/loan/loan}">下一页 </a>
-				<a id="linkLastPage" th:href="@{/loan/loan}">尾页</a>
+				<span th:text="|共${page.records}条${page.pageTotal}页,当前为第${page.pageNO}页|">共20条3页　当前为第2页　</span>
+			<span th:if="${page.pageNO==1}">
+				<a id="linkHomePage"     href="javascript:void(0)">首页</a>
+				<a id="linkPreviousPage" href="javascript:void(0)">上一页</a>
+			</span>
+				<span th:if="${page.PageNO>1}">
+					<a id="linkHomePage" th:href="@{/product/show(ptype=${type},pageno=1)}">首页</a>
+					<a id="linkPreviousPage" th:href="@{/product/show(ptype=${type},pageno=${page.pageNO-1})}">上一页</a>
+				</span>
+				<span th:if="${page.PageNO==page.pageTotal}">
+					<a id="linkNextPage"  href="javascript:void(0)">下一页 </a>
+					<a id="linkLastPage"  href="javascript:void(0)">尾页</a>
+				</span>
+
+				<span th:if="${page.PageNO < page.pageTotal}">
+				<a id="linkNextPage" th:href="@{/product/show(ptype=${type},pageno=${page.pageNO+1})}">下一页 </a>
+				<a id="linkLastPage" th:href="@{/product/show(ptype=${type},pageno=${page.pageTotal})}">尾页</a>
+				</span>
+
 			</td>
 		</tr>
 		</tbody>

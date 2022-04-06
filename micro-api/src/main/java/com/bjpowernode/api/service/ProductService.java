@@ -22,4 +22,5 @@ public interface ProductService {
                                   Integer PageNo,
                                   Integer PageSize);
 
+    Integer queryRecordCount(Integer ptype);
 }

@@ -53,4 +53,10 @@ public class ProductServiceImpl  implements ProductService {
 
         return productList;
     }
+
+    @Override
+    public Integer queryRecordCount(Integer ptype) {
+       Integer count= productMapper.selectRecordsCount(ptype);
+        return count;
+    }
 }
