@@ -11,12 +11,18 @@
     <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
     <result column="header_image" jdbcType="VARCHAR" property="headerImage" />
   </resultMap>
+  <sql id="Base_Column_List">
+    id, phone, login_password, name, id_card, add_time, last_login_time, header_image
+  </sql>
 <!--  自定义mapper的开始-->
   <select id="selectRegisterCount" resultType="java.lang.Integer">
     select count(id) from u_user
   </select>
 
+  <select id="selectUserByPhone" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from u_user where phone=#{phone}
 
+  </select>
 
 
 
@@ -24,9 +30,7 @@
 
 
 <!--  自定义的mapper的结束-->
-  <sql id="Base_Column_List">
-    id, phone, login_password, name, id_card, add_time, last_login_time, header_image
-  </sql>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -34,7 +38,8 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from u_user
     where id = #{id,jdbcType=INTEGER}
   </delete>

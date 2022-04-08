@@ -11,6 +11,9 @@
     <result column="income_money" jdbcType="DECIMAL" property="incomeMoney" />
     <result column="income_status" jdbcType="INTEGER" property="incomeStatus" />
   </resultMap>
+  <sql id="Base_Column_List">
+    id, uid, prod_id, bid_id, bid_money, income_date, income_money, income_status
+  </sql>
 <!--  自定义sql开始-->
   <select id="selectStatisticsInvestSumAllMoney" resultType="java.math.BigDecimal">
    select sum(bid_money) from b_income_record
@@ -43,15 +46,14 @@
 
 
 
-  <sql id="Base_Column_List">
-    id, uid, prod_id, bid_id, bid_money, income_date, income_money, income_status
-  </sql>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from b_income_record
     where id = #{id,jdbcType=INTEGER}
   </select>
+
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from b_income_record

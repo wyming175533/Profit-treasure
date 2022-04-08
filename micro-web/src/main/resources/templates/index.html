@@ -36,8 +36,8 @@
         <div class="register">
             <h3>动力金融网历史年化收益率</h3>
             <h4><span id="avg" th:text="${avg_rate}">13.8</span> %</h4>
-            <div class="bn_register"><a th:href="@{/loan/page/register}" class="btn-1">注册领888大红包</a></div>
-            <div class="login">有账号? <a th:href="@{/loan/page/login}">立即登录</a></div>
+            <div class="bn_register"><a th:href="@{/user/page/register}" class="btn-1">注册领888大红包</a></div>
+            <div class="login">有账号? <a th:href="@{/user/page/login}">立即登录</a></div>
         </div>
         <!-- 登录状态
         <div class="register welcome">
@@ -99,7 +99,7 @@
                         <p class="text2">剩余可投金额</p>
                     </li>
                     <li class="box4">
-                        <a th:href="@{/loan/loanInfo}" class="go-invest">立即投资</a>
+                        <a th:href="@{/product/productInfo(id=${xin.id})}" class="go-invest">立即投资</a>
                     </li>
                 </ul>
             </div>
@@ -137,7 +137,7 @@
                 </div>
                 <div class="pro-intr"><p>优选计划项目，投资回报周期1个月，起点低，适合短期资金周转、对流动性要求高的投资人。</p></div>
                 <div class="pro-btn">
-                    <a th:href="@{/loan/loanInfo}" class="btn-1">立即投资</a>
+                    <a th:href="@{/product/productInfo(id=${you.id})}" class="btn-1">立即投资</a>
                 </div>
             </div>
         </div>
@@ -174,7 +174,7 @@
                     </div>
                 </div>
                 <div class="pro-btn">
-                    <a th:href="@{/product/productInfo}" class="btn-1">立即投资</a>
+                    <a th:href="@{/product/productInfo(id=${san.id})}" class="btn-1">立即投资</a>
                 </div>
             </div>
 

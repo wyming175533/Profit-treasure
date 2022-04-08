@@ -1,10 +1,6 @@
 package com.bjpowernode.microweb.Controller;
 
 import com.bjpowernode.api.po.Product;
-import com.bjpowernode.api.service.InvestService;
-import com.bjpowernode.api.service.ProductService;
-import com.bjpowernode.api.service.UserService;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.bjpowernode.YLBConsts.*;
+import static com.bjpowernode.Consts.YLBConsts.*;
 
 @Controller
 public class IndexController extends BaseController{

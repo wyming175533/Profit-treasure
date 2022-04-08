@@ -1,9 +1,10 @@
 package com.bjpowernode.microweb.Controller;
 
-import com.bjpowernode.PageVo;
-import com.bjpowernode.Util.PageUtil;
-import com.bjpowernode.YLBConsts;
+import com.bjpowernode.vo.PageVo;
+import com.bjpowernode.Util.YLBUtil;
+import com.bjpowernode.api.model.InvestInfo;
 import com.bjpowernode.api.po.Product;
+import com.bjpowernode.microweb.view.ProductView;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bjpowernode.YLBConsts.YLB_PRODUCT_PAGESIZE;
+import static com.bjpowernode.Consts.YLBConsts.YLB_PRODUCT_INVESTPAGESIZE;
+import static com.bjpowernode.Consts.YLBConsts.YLB_PRODUCT_PAGESIZE;
 
 @Controller
 public class ProductController extends BaseController {
@@ -29,13 +31,13 @@ public class ProductController extends BaseController {
         List<Product> ProductList=new ArrayList<>();
         //判断传入的参数
         PageVo pageVo=null;
-        if(helpService.checkProductType(String.valueOf(ptype))){
-        pageno=PageUtil.PageNO(pageno);
+        if(redisOpreation.checkProductType(String.valueOf(ptype))){
+        pageno= YLBUtil.PageNO(pageno);
         ProductList=productService.FindListByType(ptype,pageno,YLB_PRODUCT_PAGESIZE);
 
 
             Integer record=productService.queryRecordCount(ptype);
-             pageVo=new PageVo(pageno, YLB_PRODUCT_PAGESIZE,record);
+            pageVo=new PageVo(pageno, YLB_PRODUCT_PAGESIZE,record);
 
         }
         model.addAttribute("productList",ProductList);
@@ -45,9 +47,35 @@ public class ProductController extends BaseController {
         return "products";
     }
 
+    /**
+     *
+     * @param id 产品主键
+     * @return 投资详情页
+     */
     @GetMapping("/product/productInfo")
-    public String  productInfo(Model model){
-        return "productInfo";
+    public String  productInfo(Model model,@RequestParam("id") Integer id,
+                               @RequestParam(required = false,defaultValue = "1")Integer pageno) {
+        String mssg="内容没有找到";
+        if(YLBUtil.ifNullZero(id)){
+            model.addAttribute("mssg",mssg);
+            return "erroPage";
+        }
+        Product product= productService.FindByProductId(id);
+        if(product==null){
+            model.addAttribute("mssg",mssg);
+            return "erroPage";
+        }
+        ProductView productView = ProductView.turnView(product);;
+
+        model.addAttribute("info",product);
+        model.addAttribute("view",productView);
+        //获取产品投资情况信息
+        List<InvestInfo> investList=investService.selectInvestInfo(product.getId(),pageno,YLB_PRODUCT_INVESTPAGESIZE);
+        model.addAttribute("investList",investList);
+
+        //@todo 右侧排行
+
+        return "productInfo2";
     }
 
 }

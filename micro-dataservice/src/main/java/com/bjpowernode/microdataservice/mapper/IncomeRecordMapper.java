@@ -1,8 +1,11 @@
 package com.bjpowernode.microdataservice.mapper;
 
+import com.bjpowernode.api.model.InvestInfo;
+import com.bjpowernode.api.po.BidInfo;
 import com.bjpowernode.api.po.IncomeRecord;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface IncomeRecordMapper {
     BigDecimal selectStatisticsInvestSumAllMoney();
@@ -17,4 +20,5 @@ public interface IncomeRecordMapper {
     int updateByPrimaryKeySelective(IncomeRecord record);
 
     int updateByPrimaryKey(IncomeRecord record);
+
 }

@@ -1,4 +1,6 @@
-package com.bjpowernode;
+package com.bjpowernode.vo;
+
+import com.bjpowernode.Consts.YLBConsts;
 
 public class PageVo {
     private Integer PageNO;//第几页
@@ -16,10 +18,10 @@ public class PageVo {
     }
 
     public Integer getPageTotal() {
+        //计算总页数，判断除数不为0
         if(PageSize==null||PageSize<1)
-            PageSize=YLBConsts.YLB_PRODUCT_PAGESIZE;
+            PageSize= YLBConsts.YLB_PRODUCT_PAGESIZE;
         PageTotal=Records % PageSize==0?Records/PageSize:Records/PageSize+1;
-        System.out.println(PageTotal);
         return PageTotal;
     }
 

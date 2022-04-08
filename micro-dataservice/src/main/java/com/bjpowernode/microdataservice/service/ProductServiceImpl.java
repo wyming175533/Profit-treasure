@@ -1,5 +1,8 @@
 package com.bjpowernode.microdataservice.service;
 
+import com.bjpowernode.Util.YLBUtil;
+import com.bjpowernode.Util.RedisOpreation;
+import com.bjpowernode.Consts.YLBKEY;
 import com.bjpowernode.api.po.Product;
 import com.bjpowernode.api.service.ProductService;
 import com.bjpowernode.microdataservice.mapper.ProductMapper;
@@ -14,20 +17,42 @@ import java.util.List;
 public class ProductServiceImpl  implements ProductService {
     @Resource
     private ProductMapper productMapper;
+
+    /**
+     * @param id 主键
+     * @return 单个产品或null
+     */
     @Override
     public Product FindByProductId(Integer id) {
-        return null;
+
+        if(YLBUtil.ifNullZero(id)){
+            return null;
+        }
+
+        Product product=productMapper.selectByPrimaryKey(id);
+
+        return product;
     }
 
     @Resource
-    private HelpService helpService;
+    private RedisOpreation redisOpreation;
 
     /**
      * @return 返回平均收益率
     */
     @Override
     public BigDecimal computeAvgRate() {
-        return productMapper.selectCompetAvgRate();
+        BigDecimal rate= (BigDecimal) redisOpreation.getKey(YLBKEY.PRODUCT_RATE);
+        if(rate==null){
+            synchronized (this){
+                if((rate= (BigDecimal) redisOpreation.getKey(YLBKEY.PRODUCT_RATE))==null){
+                    rate=productMapper.selectCompetAvgRate();
+                    redisOpreation.setKey(YLBKEY.PRODUCT_RATE,rate,30);
+                }
+            }
+        }
+
+        return rate;
     }
 
     /**
@@ -39,15 +64,12 @@ public class ProductServiceImpl  implements ProductService {
     @Override
     public List<Product> FindListByType(Integer ProductType, Integer PageNo, Integer PageSize) {
         List<Product> productList=new ArrayList<>();
-        if(helpService.checkProductType(String.valueOf(ProductType))){
+        if(redisOpreation.checkProductType(String.valueOf(ProductType))){
             //判断参数是否合法
-            if(PageNo==null||PageNo<1){
-                PageNo=1;
-            }
-            if(PageSize==null||PageSize<1||PageSize>100){
-                PageSize=10;
-            }
-            int offset=(PageNo-1)*PageSize;
+            PageNo= YLBUtil.PageNO(PageNo);
+            PageSize= YLBUtil.PageSize(PageSize);
+
+            int offset= YLBUtil.offset(PageNo,PageSize);
             productList=productMapper.selectListByType(ProductType,offset,PageSize);
         }
 

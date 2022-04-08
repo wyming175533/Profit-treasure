@@ -14,7 +14,6 @@
 
 <body>
 <div id="header">
-<!--<jsp:include page="commons/header.jsp"/>-->
     <div th:include="commons/header :: html"></div>
 </div>
 
@@ -29,36 +28,30 @@
       <!-- 产品详情start -->
       <div class="pro-info-details">
         <div class="pro-name">
-          <h2><span th:text="${info.productName+'('+info.productNo+')期'}">季度宝 (20170726期)</span></h2>
+          <h2><span th:text="${view.allName}">季度宝 (20170726期)</span></h2>
         </div>
         <div class="pro-info">
           <ul class="clearfix">
             <li class="info-1">
               <p>历史年化利率</p>
-              <h3 th:text="${info.rate}">4.9%</h3>
+              <h3 th:text="${view.rate}">4.9%</h3>
               <div class="info-bt">
               <span>本产品采用普通利率</span>
               </div>
             </li>
             <li class="info-2">
               <p>募集金额(元)</p>
-              <h3 th:text="${info.productMoney}">500000.0</h3>
-              <div class="info-bt" >
-              	<span th:unless="${info.productStatus==0}">
-              		<!-- 只有状态为0时为募集，其它都为已满标 -->
-              		募集中,剩余募集金额[[${info.leftProductMoney}]] 元
-              	</span>
-                  <span th:if="${info.productStatus==0}">
-                                已满标
+              <h3 th:text="${view.productMoney}">500000.0</h3>
+              <div class="info-bt">
+              	<span th:text="${view.moneyDesc}">
+
               	</span>
               </div>
             </li>
             <li class="info-3">
               <p>投资周期</p>
               <!-- 只有新手宝产品周期为天 -->
-
-              <h3 th:if="${info.productType==0}">[[${info.cycle}]]天</h3>
-                <h3 th:unless="${info.productType==0}">[[${info.cycle}]]个月</h3>
+              <h3 th:text="${view.cycle}">6个月</h3>
               <div class="info-bt"><span></span></div>
             </li>
           </ul>
@@ -80,31 +73,23 @@
         <div class="vertical-side">投资列表</div>
 		<dl class="record-list">
 		<dt>
-			<span class="record-num">序号</span><span class="invest-user">投资人</span><span class="invest-money">投资金额(元)</span><span class="invest-time">投资时间</span>
+			<span class="record-num">序号</span>
+            <span class="invest-user">投资人</span>
+            <span class="invest-money">投资金额(元)</span>
+            <span class="invest-time">投资时间</span>
 		</dt>
 		
 			<!-- 如果投资记录为空，显示以下文字 -->
-			<dd style="text-align:center;">该产品暂时还没有人投资，赶快去投资吧~</dd>
+			<dd style="text-align:center;" th:if="${#lists.size(investList) == 0 }">该产品暂时还没有人投资，赶快去投资吧~</dd>
 			
-		<!-- 如果有投资记录，循环遍历显示 -->
-		<dd>
-			<span class="record-num">1</span>
-			<span class="invest-user">137******89</span> 
-			<span class="invest-money">1000.0</span>
-			<span class="invest-time">2017-09-12 13:34:22</span>
-		</dd>
-		<dd>
-			<span class="record-num">2</span>
-			<span class="invest-user">130******12</span> 
-			<span class="invest-money">1000.0</span>
-			<span class="invest-time">2017-07-12 17:34:22</span>
-		</dd>
-		<dd>
-			<span class="record-num">3</span>
-			<span class="invest-user">137******33</span> 
-			<span class="invest-money">1000.0</span>
-			<span class="invest-time">2017-06-12 10:34:22</span>
-		</dd>
+            <!-- 如果有投资记录，循环遍历显示 -->
+            <dd th:each="invest:${investList}">
+                <span class="record-num" th:text="${investStat.count}">1</span>
+                <span class="invest-user" th:text="${invest.phone}">137******89</span>
+                <span class="invest-money" th:text="${invest.bidMoney}">1000.0</span>
+                <span class="invest-time" th:text="${#dates.format(invest.bidTime,'yyyy-MM-dd HH:mm:ss')}">2017-09-12 13:34:22</span>
+            </dd>
+
 		</dl>
 		</div>
       </div>

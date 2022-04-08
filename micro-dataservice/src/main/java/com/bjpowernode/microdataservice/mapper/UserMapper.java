@@ -4,6 +4,7 @@ import com.bjpowernode.api.po.User;
 
 public interface UserMapper {
     int selectRegisterCount();
+    User selectUserByPhone(String phone);
 
     int deleteByPrimaryKey(Integer id);
 

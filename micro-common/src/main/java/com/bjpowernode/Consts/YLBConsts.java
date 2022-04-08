@@ -1,4 +1,4 @@
-package com.bjpowernode;
+package com.bjpowernode.Consts;
 
 public class YLBConsts {
      //    ********************产品类型*************
@@ -8,4 +8,6 @@ public class YLBConsts {
 
     //***************************默认分页大小*************
     public static  final  Integer YLB_PRODUCT_PAGESIZE=9;
+    //***************************默认投资记录每页大小*************
+    public  static final Integer YLB_PRODUCT_INVESTPAGESIZE=5;
 }
