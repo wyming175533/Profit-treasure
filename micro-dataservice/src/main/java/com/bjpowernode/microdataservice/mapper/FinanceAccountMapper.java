@@ -14,4 +14,7 @@ public interface FinanceAccountMapper {
     int updateByPrimaryKeySelective(FinanceAccount record);
 
     int updateByPrimaryKey(FinanceAccount record);
+
+    void insertUidAndMoney(FinanceAccount financeAccount);
+
 }

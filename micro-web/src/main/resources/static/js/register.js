@@ -32,7 +32,12 @@ function closeBox(maskid,bosid){
 }
 
 //注册协议确认
-$(function() {
+$(function(){
+
+	$("#agree").unbind();
+	$("#loginPassword").empty();
+	$("#agree").prop("click",false);
+
 	//手机号验证
 	$("#phone").on("focus",function (){
 		hideError("phone")
@@ -58,7 +63,6 @@ $(function() {
 			dataType:"json",
 			success:function(resp){
 				//resp:        {"code":304,"msg":"用户已经存在","data":"","reslut":false}
-				alert(resp.result)
 				//if( !resp.result){
 				if(resp.result==false){
 					showError("phone",resp.msg);
@@ -114,42 +118,71 @@ $(function() {
 
 		}
 	});
-
-	//按钮
-	let $codeBtn = $("#messageCodeBtn");
-	$("#messageCodeBtn").on("click",function (){
+	$("#btnRegist").on("click",function (){
+		//失去焦点
 		$("#phone").blur();
 		$("#loginPassword").blur();
 		$("#messageCode").blur();
-		if($("#phoneErr")==""&&$("#loginPasswordErr")==""&&$("#messageCode")==""){
-
-
+		//检查错误文本
+		let errText=$("[id$='Err']").text();
+		if(""==errText){
+			$.ajax({
+				url:contextPath+"/user/register",
+				type:"post",
+				data:{
+					phone:$.trim($("#phone").val()),
+					password:$.md5( $.trim( $("#loginPassword").val())),
+					code:$.trim($("#messageCode").val())
+				},
+				dataType: "json",
+				success:function (resp){
+					if(resp.result){
+						window.location.href=contextPath+"/user/realName?phone="+$.trim($("#phone").val());
+					}
+					else {
+						alert(resp.msg);
+					}
+				},
+				error:function (){
+					alert("请稍后重试！")
+				}
+			})
 		}
-		let second=-1;
-		$.leftTime(10,function(d){
-			//d.status,值true||false,倒计时是否结束;
-			//d.s,倒计时秒;
-			second=parseInt(d.s);
-			if(second==0){
-				$codeBtn.text("获取验证码");
-			}else{
-				$codeBtn.text(second+"后重新获取");
-			}
-
-		});
-
 	})
 
+	//按钮
+	let $codeBtn = $("#messageCodeBtn");
+	$("#messageCodeBtn").on("click",function () {
+		$("#phone").blur();
+		let errText = $.trim($("#phoneErr").text());
+		if (errText === "") {
+			if ($codeBtn.hasClass("on")) {
+				return;
+			}
+			$codeBtn.addClass("on");
+			//倒计时
+			let second = -1;
+			$.leftTime(10, function (d) {
 
+				//d.status,值true||false,倒计时是否结束;
+				//d.s,倒计时秒;
+				second = parseInt(d.s);
+				if (second == 0) {
+					$codeBtn.removeClass("on");
+					$codeBtn.text("获取验证码");
+				} else {
+					$codeBtn.text(second + "后重新获取");
+				}
 
+			});
 
-
-
-
-
-
-
-
+			//发送短信业务
+			$.post(contextPath + "/sms/send/authCode", {phone: $("#phone").val()},
+				function (resp) {
+					//alert(resp);
+				}, "json")
+		}
+	})
 
 	$("#agree").click(function(){
 		var ischeck = document.getElementById("agree").checked;

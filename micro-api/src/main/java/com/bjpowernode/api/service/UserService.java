@@ -6,4 +6,7 @@ public interface UserService {
     Integer registerAllUserCount();
 
     User selectUserByPhone(String phone);
+
+    User insertUser(String phone, String password, String loginIp, String device);
+
 }

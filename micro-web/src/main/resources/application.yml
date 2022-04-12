@@ -20,3 +20,14 @@ dubbo:
     timeout: 30000
     check: false
     retires: 0
+
+#短信服务myKey:f4ccfaca5a3f31e4f2007902e83e9208，动力节点3680fa919b771148da626bbcbd459475
+#
+jdwx:
+  sms:
+    url: https://way.jd.com/chuangxin/dxjk
+    content: 【YM】你的验证码是：%s，3分钟内有效！请注意保护信息，不要将该信息转发给其他人！
+    appkey: f4ccfaca5a3f31e4f2007902e83e9208
+  check:
+      url: https://way.jd.com/youhuoBeijing/test
+      appkey: f4ccfaca5a3f31e4f2007902e83e9208

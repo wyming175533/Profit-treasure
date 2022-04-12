@@ -4,6 +4,7 @@ import com.bjpowernode.Consts.YLBKEY;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -53,7 +54,19 @@ public class RedisOpreation {
      * @param minute 在内存的时间，分钟
      */
     public void setKey(String key, Object value,long minute){
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.opsForValue().set(key,value,minute, TimeUnit.MINUTES);
+    }
+
+    /**
+     * @param key 字符串型
+     * @return 获取值
+     */
+    public String getStringKey(String key){
+        return stringRedisTemplate.opsForValue().get(key);
+    }
+    public void setStringKey(String key,String value,long minute){
+        stringRedisTemplate.opsForValue().set(key,value,minute,TimeUnit.MINUTES);
     }
 
 

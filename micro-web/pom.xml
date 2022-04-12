@@ -18,6 +18,12 @@
 		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
+<!--		自定义配置文件内容可提示-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
 <!--		redis-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

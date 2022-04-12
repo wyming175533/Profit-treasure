@@ -24,9 +24,15 @@
 
   </select>
 
+  <insert id="insertUserSelectID">
+    insert into u_user(phone,login_password,add_time)values (
+    #{phone},#{loginPassword},#{addTime})
+    <selectKey keyColumn="newId" keyProperty="id" resultType="int" order="AFTER">
+      select last_insert_id() as newId
+    </selectKey>
+  </insert>
 
-
-
+  
 
 
 <!--  自定义的mapper的结束-->
@@ -106,6 +112,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" >
     update u_user
     <set>

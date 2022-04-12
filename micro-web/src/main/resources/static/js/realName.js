@@ -1,6 +1,51 @@
 
 //同意实名认证协议
 $(function() {
+	$("#phone").on("blur",function (){
+		if($("#phone").val()!=$("#registerPhone")){
+			showError("phone","注册手机号和登录手机号不一致")
+		}
+	})
+	$("#btnRegist").on("click",function (){
+
+
+
+			if(!/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test($("#idCard").val())){
+				showError("idCard","身份证信息格式不正确")
+			}
+
+			$.ajax({
+				url:contextPath+"/user/checked",
+				type:"post",
+				data:{
+					registerPhone:$.trim($("#registerPhone").val()),
+					phone:$.trim($("#phone").val()),
+					idCard:$.trim($("#idCard").val()),
+					realName:$.trim($("#realName").val())
+				},
+				dataType:"json",
+				success:function (resp){
+					if(resp.result){
+						//	window.location.href=contextPath+"/user/myCenter";
+						alert(resp)
+					}
+					else {
+						alert(resp.msg);
+					}
+				},
+				error:function (resp){
+					alert("请稍后重试");
+				}
+
+
+
+			})
+
+	})
+
+
+
+
 	$("#agree").click(function(){
 		var ischeck = document.getElementById("agree").checked;
 		if (ischeck) {

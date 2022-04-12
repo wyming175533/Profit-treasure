@@ -7,7 +7,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 class MicroWebApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void testSmsInfo(){
+		String s="你的验证码位%s";
+		s=String.format(s,"123456");
+		System.out.println(s);
 	}
 
 }
