@@ -9,10 +9,18 @@
     <result column="bid_time" jdbcType="TIMESTAMP" property="bidTime" />
     <result column="bid_status" jdbcType="INTEGER" property="bidStatus" />
   </resultMap>
+
   <resultMap id="InvestMap" type="com.bjpowernode.api.model.InvestInfo">
     <result column="phone" jdbcType="VARCHAR" property="phone"/>
     <result column="bid_money" jdbcType="DECIMAL" property="bidMoney" />
     <result column="bid_time" jdbcType="TIMESTAMP" property="bidTime" />
+  </resultMap>
+
+  <resultMap id="MyInvestMap" type="com.bjpowernode.api.model.MyInvestVo">
+    <result column="bid_money" jdbcType="DECIMAL" property="bidMoney" />
+    <result column="bid_time" jdbcType="TIMESTAMP" property="bidTime" />
+    <result column="bid_status" jdbcType="INTEGER" property="bidStatus" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
 
   </resultMap>
   <sql id="Base_Column_List">
@@ -36,10 +44,27 @@
 
 
 
+  <select id="selectMyInvestByUid" resultMap="MyInvestMap">
+      SELECT
+          bid.bid_money,
+          bid.bid_time,
+          bid.bid_status,
+          product.product_name
+      FROM
+          b_bid_info bid
+      LEFT JOIN b_product_info product ON bid.pid = product.id
+      WHERE
+          bid.uid = #{id}
+      ORDER BY
+          bid.bid_time DESC
+      limit #{offset},#{pageSize}
+
+  </select>
 
 
-
-
+  <select id="selectInvestRecordByUid" resultType="java.lang.Integer">
+    select count(id) from b_bid_info where uid=#{id};
+  </select>
 <!--  自定义sql-->
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -47,6 +72,8 @@
     from b_bid_info
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+
   <delete id="deleteByPrimaryKey" >
     delete from b_bid_info
     where id = #{id,jdbcType=INTEGER}

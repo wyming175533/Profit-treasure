@@ -4,6 +4,7 @@ import com.bjpowernode.Util.YLBUtil;
 import com.bjpowernode.Util.RedisOpreation;
 import com.bjpowernode.Consts.YLBKEY;
 import com.bjpowernode.api.model.InvestInfo;
+import com.bjpowernode.api.model.MyInvestVo;
 import com.bjpowernode.api.service.InvestService;
 import com.bjpowernode.microdataservice.mapper.BidInfoMapper;
 import com.bjpowernode.microdataservice.mapper.IncomeRecordMapper;
@@ -57,4 +58,26 @@ public class InvestServiceImpl  implements InvestService {
         System.out.println(list.toString());
         return list;
     }
+
+    @Override
+    public List<MyInvestVo>  selectMyInvestByUid(Integer id, Integer pageNo, Integer pageSize) {
+        if(YLBUtil.ifNullZero(id))
+            return new ArrayList<MyInvestVo>();
+        pageNo=YLBUtil.PageNO(pageNo);
+        pageSize=YLBUtil.PageSize(pageSize);
+        Integer offset=YLBUtil.offset(pageNo,pageSize);
+        List<MyInvestVo> listVo=bidInfoMapper.selectMyInvestByUid(id,offset,pageSize);
+        System.out.println(listVo.toString());
+        return listVo;
+    }
+
+    @Override
+    public Integer InvestRecords(Integer uid) {
+        Integer count=0;
+        if(uid!=null){
+           count=  bidInfoMapper.selectInvestRecordByUid(uid);
+        }
+        return count;
+    }
+
 }

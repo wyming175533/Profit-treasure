@@ -1,7 +1,9 @@
 package com.bjpowernode.microweb.Controller;
 
+import com.bjpowernode.Consts.YLBConsts;
 import com.bjpowernode.Consts.YLBKEY;
 import com.bjpowernode.Util.YLBUtil;
+import com.bjpowernode.api.model.MyInvestVo;
 import com.bjpowernode.api.model.ServiceResult;
 import com.bjpowernode.api.po.FinanceAccount;
 import com.bjpowernode.api.po.User;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class UserController extends BaseController {
@@ -62,16 +65,37 @@ public class UserController extends BaseController {
 
     @GetMapping("/user/realName")
     public String RealName(String phone,Model model,HttpSession session){
+        User user=null;
         if(phone==null){
-            User user= (User) session.getAttribute("user");
+            user=(User)session.getAttribute(YLBKEY.USER_SESSION);//当前登录用户
+            if(user==null){
+                 user= (User) session.getAttribute("user");//注册时记录的用户
+            }
             phone=user.getPhone();
         }
         model.addAttribute("phone",phone);
         return "realName";
     }
-    @GetMapping("/user/myCenter")
-    public String myCenter(){
 
+    /**跳转到个人中心/小金库
+     * @param session session域
+     * @param model
+     * @return
+     */
+    @GetMapping("/user/myCenter")
+    public String myCenter(HttpSession session,Model model){
+
+        User user= (User) session.getAttribute(YLBKEY.USER_SESSION);
+        if(user!=null){
+            FinanceAccount account=accountService.queryAccountMoney(user.getId());
+            model.addAttribute("availableMoney",account.getAvailableMoney());//获取用户金额
+
+            List<MyInvestVo> listVo=investService.selectMyInvestByUid(user.getId(),1, YLBConsts.YLB_PRODUCT_INVESTPAGESIZE);
+            model.addAttribute("myInvest",listVo);//获取用户投资列表
+
+
+
+        }
         return "myCenter";
     }
 

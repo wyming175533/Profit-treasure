@@ -112,7 +112,7 @@
 	            	<!-- 判断用户是否登录：未登录，显示登录连接 -->
 	            	<span style="font-size:18px;color:#ff6161;vertical-align:bottom;" th:if="${session.loginUser==null}"><a href="javascript:void(0)" class="btn-login">请登录</a></span>
 	        
-	            	<!-- 判断用户是否登录：已登录，显示可用余额 -->
+	            	<!-- 判断用户是否登录：已登录，显示可用余额 -->‘’‘
 
 	           		<span style="font-size:18px;color:#ff6161;vertical-align:bottom;" th:if="${session.loginUser!=null}">
                       [[${availableMoney}]] 元

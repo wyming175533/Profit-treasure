@@ -32,20 +32,22 @@
                         <span><img id="user_photo" th:src="@{/images/header.png}" width="90" height="90"/></span>
                         <a th:href="@{/loan/uploadHeader}">上传头像</a>
                     </div>
-                    <h3 class="name">
-
-                        <!--<a th:href="@{/loan/page/realName}">请认证姓名</a>-->
-                        张三
+                    <h3 class="name" th:switch="${session.loginUser.name}">
+                        <div th:case="null">
+                            <a th:href="@{/user/realName}">请认证姓名</a>
+                        </div>
+                       <div th:case="*">
+                           [[${session.loginUser.name}]]
+                       </div>
                     </h3>
-                    <h4></h4>
-                    <h4>13725698888</h4>
-                    <h4>最近登录：2017-05-21 15:23:36</h4>
+                    <h4 th:text="${session.loginUser.phone}">13725698888</h4>
+                    <h4 th:text="|最近登录:${#dates.format(session.loginUser.lastLoginTime,'yyy-MM-dd HH:mm:ss')}|">最近登录：2017-05-21 15:23:36</h4>
                 </div>
                 <i class="borderRight"></i>
                 <ul class="credenBalance">
                     <li class="availMoney">
                         <h3>可用余额：</h3>
-                        <span class="moneyIcon"><i>¥ 9000.0 元</i></span>
+                        <span class="moneyIcon"><i> [[${#numbers.formatCurrency(availableMoney)}]] 元</i></span>
                         <a class="recharge" th:href="@{/loan/page/toRecharge}">充值</a>
                         <a class="inves" th:href="@{/loan/loan}">投资</a>
                     </li>
@@ -66,39 +68,17 @@
                             <span class="money">投资金额</span>
                             <span class="profit">投资时间</span>
                         </dt>
-                        <dd>
-                            <span class="name">1</span>
-                            <span class="number">个人消费贷</span>
-                            <span class="money">5000.0</span>
-                            <span class="profit">2017-06-12</span>
+
+                        <dd th:each="list:${myInvest}">
+                            <span class="name" th:text="${listStat.count}">1</span>
+                            <span class="number" th:text="${list.productName}">个人消费贷</span>
+                            <span class="money" th:text="${#numbers.formatCurrency(list.bidMoney)}">5000.0</span>
+                            <span class="profit" th:text="${#dates.format(list.bidTime,'yyyy-MM-dd')}">2017-06-12</span>
                         </dd>
-                        <dd>
-                            <span class="name">2</span>
-                            <span class="number">个人消费贷</span>
-                            <span class="money">5500.0</span>
-                            <span class="profit">2017-05-02</span>
-                        </dd>
-                        <dd>
-                            <span class="name">3</span>
-                            <span class="number">个人消费贷</span>
-                            <span class="money">3000.0</span>
-                            <span class="profit">2017-01-01</span>
-                        </dd>
-                        <dd>
-                            <span class="name">4</span>
-                            <span class="number">个人消费贷</span>
-                            <span class="money">3000.0</span>
-                            <span class="profit">2017-01-01</span>
-                        </dd>
-                        <dd>
-                            <span class="name">5</span>
-                            <span class="number">个人消费贷</span>
-                            <span class="money">3000.0</span>
-                            <span class="profit">2017-01-01</span>
-                        </dd>
+
                     </dl>
                     <div class="more-allinvest">
-                        <a th:href="@{/loan/myInvest}"><span>查看全部投资</span><i></i></a>
+                        <a th:href="@{/invest/myInvest}"><span>查看全部投资</span><i></i></a>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 package com.bjpowernode.api.service;
 
 import com.bjpowernode.api.model.InvestInfo;
+import com.bjpowernode.api.model.MyInvestVo;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,4 +16,8 @@ public interface InvestService {
      * @return
      */
     List<InvestInfo> selectInvestInfo(Integer id, Integer pageno, Integer InvestPagesize);
+
+    List<MyInvestVo> selectMyInvestByUid(Integer id, Integer i, Integer pageSize);
+
+    Integer InvestRecords(Integer uid);
 }
