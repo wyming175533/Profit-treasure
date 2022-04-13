@@ -31,21 +31,21 @@ public class Result<T> {
         this.msg = msg;
         this.data = data;
     }
-    public static Result<String> fail(){
+    public static Result fail(){
             Result<String> result=new Result<>();
             result.setResult(false);
             result.setData("");
             result.setEnum(UN_KNOWN);//以枚举方式赋值    未知错误
             return result;
     }
-    public static Result<String> ok(){
+    public static Result ok(){
         Result<String> result=new Result<>();
         result.setResult(true);
         result.setData("");
         result.setEnum(RES_SUCCESS);//以枚举方式赋值   成功
         return result;
     }
-    public static  Result<String> erro(ResponseCode resp){
+    public static  Result erro(ResponseCode resp){
         Result<String> result=new Result<>();
         result.setResult(false);
         result.setData("");

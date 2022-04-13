@@ -17,4 +17,5 @@ public interface FinanceAccountMapper {
 
     void insertUidAndMoney(FinanceAccount financeAccount);
 
+    FinanceAccount selectByUid(Integer uid);
 }

@@ -2,18 +2,41 @@
 //同意实名认证协议
 $(function() {
 	$("#phone").on("blur",function (){
-		if($("#phone").val()!=$("#registerPhone")){
+
+		if($("#phone").val()!=$("#registerPhone").val()){
 			showError("phone","注册手机号和登录手机号不一致")
+		}else {
+			showSuccess("phone")
 		}
 	})
+	$("#idCard").on("blur",function (){
+		if(!/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test($("#idCard").val())){
+			showError("idCard","身份证信息格式不正确")
+		}else{
+			showSuccess("idCard");
+		}
+	})
+	$("#realName").on("blur",function (){
+		let name = $.trim( $("#realName").val() );
+		if( name === undefined || name === null || name === ""){
+			showError("realName","必须输入姓名");
+		} else if(name.length < 2 ){
+			showError("realName","姓名至少是2个字符");
+		} else if( !/^[\u4e00-\u9fa5]{0,}$/.test(name)){
+			showError("realName","姓名必须是中文");
+		} else {
+			showSuccess("realName");
+		}
+	})
+
 	$("#btnRegist").on("click",function (){
+		$("#phone").blur();
+		$("#idCard").blur();
+		$("#realName").blur();
+		//let errText=$("[id$='Err']").text();
+		let errText=$("[id$='Err']").text();
 
-
-
-			if(!/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test($("#idCard").val())){
-				showError("idCard","身份证信息格式不正确")
-			}
-
+		if(""==errText){
 			$.ajax({
 				url:contextPath+"/user/checked",
 				type:"post",
@@ -26,8 +49,7 @@ $(function() {
 				dataType:"json",
 				success:function (resp){
 					if(resp.result){
-						//	window.location.href=contextPath+"/user/myCenter";
-						alert(resp)
+							window.location.href=contextPath+"/user/myCenter";
 					}
 					else {
 						alert(resp.msg);
@@ -40,6 +62,7 @@ $(function() {
 
 
 			})
+		}
 
 	})
 

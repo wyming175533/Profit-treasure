@@ -4,18 +4,26 @@ package com.bjpowernode.code;
  * 枚举定义返回结果，包括成功，未知错误，手机号格式错误
  */
 public enum ResponseCode {
+    UN_KNOWN(000,"未知错误——————"),
 
-    RES_SUCCESS(101,"成功"),
-    UN_KNOWN(201,"未知错误——————"),
+    RES_SUCCESS(111,"成功"),
+
     PHONE_ERR(202,"手机号格式错误"),
-    PHONE_DIFF_ERR(204,"注册手机号和认证手机号不一致"),
-    PARAM_EMPTY(203,"参数不能为空"),
-    User_EXISTS(304,"用户已经存在"),
-    PASSWORD_LENGTH_ERR(405,"参数长度有误"),
-    AuthCode_ERR(506,"验证码不正确"),
-    IDCARD_REALNAME_DIFF(607,"用户身份信息不匹配")
+    REAL_NAME_ERR(203,"姓名格式有误"),
+    IDCARD_REALNAME_ERR(204,"身份证号格式错误"),
 
-    ;
+    PHONE_DIFF_ERR(303,"注册手机号和认证手机号不一致"),
+    AuthCode_ERR(304,"验证码不正确"),
+    IDCARD_REALNAME_DIFF(305,"用户信息不匹配"),
+
+    User_EXISTS(404,"用户已经存在"),
+
+    PARAM_EMPTY(505,"参数不能为空"),
+    PASSWORD_LENGTH_ERR(506,"参数长度有误"),
+
+    RNE_TIMES_ERR(601,"超出当日认证次数"),
+
+    USER_LOGIN_ERR(701,"请先登录");
 
 
 

@@ -21,7 +21,7 @@ public class smsController {
     public Result<String> smsSend(String phone){
         Result<String> result=Result.fail();
         //判断手机号是否合法
-        if(!YLBUtil.regex(phone)){
+        if(!YLBUtil.regexphone(phone)){
             result.setEnum(ResponseCode.PHONE_ERR);
         }else{
             if(sendService.userRegisterSmsSend(phone)){//判断

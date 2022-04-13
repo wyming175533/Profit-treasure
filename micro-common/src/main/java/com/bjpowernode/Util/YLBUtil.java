@@ -29,10 +29,18 @@ public class YLBUtil {
         return (pageNO-1)*pageSize;
     }
 
-    public static boolean regex(String str){
+    public static boolean regexphone(String str){
         boolean flag=false;
         if(str!=null){
             flag=str.matches("^1[1-9]\\d{9}$");
+
+        }
+        return  flag;
+    }
+    public static boolean regexIdCard(String str){
+        boolean flag=false;
+        if(str!=null){
+            flag=str.matches("(^\\d{15}$)|(^\\d{18}$)|(^\\d{17}(\\d|X|x)$)");
 
         }
         return  flag;

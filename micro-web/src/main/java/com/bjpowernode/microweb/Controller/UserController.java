@@ -1,12 +1,16 @@
 package com.bjpowernode.microweb.Controller;
 
+import com.bjpowernode.Consts.YLBKEY;
 import com.bjpowernode.Util.YLBUtil;
+import com.bjpowernode.api.model.ServiceResult;
+import com.bjpowernode.api.po.FinanceAccount;
 import com.bjpowernode.api.po.User;
 import com.bjpowernode.api.service.UserService;
 import com.bjpowernode.code.ResponseCode;
 import com.bjpowernode.microweb.Service.UserAndSmsCheckService;
 import com.bjpowernode.vo.Result;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Controller
 public class UserController extends BaseController {
@@ -39,7 +46,7 @@ public class UserController extends BaseController {
     Result result=Result.fail();
         if(StringUtils.isBlank(phone)){
             result=Result.erro(ResponseCode.PARAM_EMPTY);
-        }else if(!YLBUtil.regex(phone)){
+        }else if(!YLBUtil.regexphone(phone)){
             result=Result.erro(ResponseCode.PHONE_ERR);
         }else{
             User user=userService.selectUserByPhone(phone);
@@ -54,32 +61,63 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/user/realName")
-    public String RealName(String phone,Model model){
+    public String RealName(String phone,Model model,HttpSession session){
+        if(phone==null){
+            User user= (User) session.getAttribute("user");
+            phone=user.getPhone();
+        }
         model.addAttribute("phone",phone);
         return "realName";
     }
+    @GetMapping("/user/myCenter")
+    public String myCenter(){
+
+        return "myCenter";
+    }
+
+    /**
+     * 用户认证，没天认证次数不能超过三次
+     * @todo 后期会做定时任务，在那时对无效的key进行删除
+     * @param phone 认证手机号
+     * @param idCard 身份证号
+     * @param realName 真实姓名
+     * @param registerPhone 注册时手机号
+     * @return 认证结果
+     */
     @ResponseBody
     @PostMapping("/user/checked")
-    public Result<String> checked(String phone,String idCard,String realName,String registerPhone){
+    public Result<String> checked(String phone, String idCard, String realName, String registerPhone, HttpSession session){
         Result<String> result=Result.fail();
+        String date= DateFormatUtils.format(new Date(),"yyyyMMdd");
         if(StringUtils.isAllBlank(phone,idCard,realName,registerPhone)){
-            result=Result.erro(ResponseCode.PARAM_EMPTY);
-        }else if(!YLBUtil.regex(phone)){
-            result=Result.erro(ResponseCode.PHONE_ERR);
-        }else if(registerPhone!=phone){
-            result=Result.erro(ResponseCode.PHONE_DIFF_ERR);
-        }
-        else if(1<0)//@todo 验证身份证号格式
-             {}
-        else if(realName.length()<2){
-            //姓名小于两位错误
-        }else if(!USservice.checkIdcard(idCard,realName)){
+            result=Result.erro(ResponseCode.PARAM_EMPTY);//参数空
+        }else if(!YLBUtil.regexphone(phone)){
+            result=Result.erro(ResponseCode.PHONE_ERR);//手机号格式错误
+        }else if(!registerPhone.equals(phone)){
+            result=Result.erro(ResponseCode.PHONE_DIFF_ERR);//手机号不同
+        } else if(!YLBUtil.regexIdCard(idCard)) {
+            result=Result.erro(ResponseCode.IDCARD_REALNAME_ERR);
+        } else if(realName.length()<2){//姓名格式错误
+            result=Result.erro(ResponseCode.REAL_NAME_ERR);
+        }else if(USservice.checkErrTimes(phone,date)){
+            result=Result.erro(ResponseCode.RNE_TIMES_ERR);
+        }else if(!USservice.checkIdcard(idCard,realName)){//验证姓名和身份证号是否匹配
+            //失败时做记录，超过三当日停止继续验证
+            USservice.addErrTimes(phone,date);
+
             result=Result.erro(ResponseCode.IDCARD_REALNAME_DIFF);
         }else{
             result=Result.ok();
+            User user=new User();
+            user.setPhone(phone);
+            user.setIdCard(idCard);
+            user.setName(realName);
+            user=userService.update(user);
+            if(user!=null){
+                session.setAttribute("user",user);
+            }
         }
-
-
+        //根据结果完善数据库用户信息
         return result;
 
     }
@@ -93,7 +131,7 @@ public class UserController extends BaseController {
         //参数判断
         if(StringUtils.isAllBlank(phone,code,password)){
             result.setEnum(ResponseCode.PARAM_EMPTY);
-        }else if(!YLBUtil.regex(phone)){
+        }else if(!YLBUtil.regexphone(phone)){
             result.setEnum(ResponseCode.PHONE_ERR);
         }else if(password.length()<32){
             result.setEnum(ResponseCode.PASSWORD_LENGTH_ERR);
@@ -101,17 +139,102 @@ public class UserController extends BaseController {
             result.setEnum(ResponseCode.AuthCode_ERR);
         }else{
         //注册用户
-            String LoginIp=request.getRemoteAddr();
-            String Device=request.getHeader("User-Agent");
-            User user =userService.insertUser(phone,password,LoginIp,Device);
+            String login_ip=request.getRemoteAddr();
+            String login_device=request.getHeader("User-Agent");
+            User user =userService.insertUser(phone,password,login_ip,login_device);
             if(user!=null){
-
+                HttpSession session=request.getSession();
+                session.setAttribute("user",user);
                 result=Result.ok();
+                USservice.removeAuthCode(code,phone);
             }
          //跳转到实名认证界面
         }
 
         return  result;
+    }
+
+    /**跳转到用户登录页面
+     * @param returnUrl  返回地址
+     * @param request 用于获取无参时候返回地址
+     * @param model 存储
+     * @return login.html
+     */
+    @GetMapping("/user/login")
+    public String login(String returnUrl,HttpServletRequest request,Model model){
+        if(StringUtils.isBlank(returnUrl)){
+            returnUrl=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+
+                    request.getContextPath()+"/index.html";
+            System.out.println(returnUrl);
+        }
+       Integer userCount= userService.registerAllUserCount();
+        BigDecimal allMoney=investService.statisticsInvestSumAllMoney();
+        BigDecimal rate=productService.computeAvgRate();
+        model.addAttribute("returnUrl",returnUrl);
+        model.addAttribute("userCount",userCount);
+        model.addAttribute("allMoney",allMoney);
+        model.addAttribute("rate",rate);
+
+
+        return "login";
+    }
+
+    @PostMapping("/user/loginCheck")
+    @ResponseBody
+    public Result<User> loginCheck(String phone,String password,HttpServletRequest request){
+        Result<User> result=Result.fail();
+        if(StringUtils.isAllBlank(phone,password)){
+            result=Result.erro(ResponseCode.PARAM_EMPTY);
+        }else if(!YLBUtil.regexphone(phone)){
+            result=Result.erro(ResponseCode.PHONE_ERR);
+        }else if(password.length()<32){
+            result.setEnum(ResponseCode.PASSWORD_LENGTH_ERR);
+        }else {
+            String login_ip=request.getRemoteAddr();
+            String login_device=request.getHeader("User-Agent");
+            ServiceResult serviceResult= userService.loginCheck(phone,password,login_ip,login_device);
+            result.setMsg(serviceResult.getMsg());
+            if(serviceResult.getData()!=null){
+                result.setData((User) serviceResult.getData());
+                request.getSession().setAttribute(YLBKEY.USER_SESSION,(User)serviceResult.getData());
+            }
+
+            result.setCode(serviceResult.getCode());
+            result.setResult(serviceResult.isResult());
+
+        }
+
+
+
+        return result;
+    }
+
+    @GetMapping("/user/logout")
+    public String logout (HttpServletRequest request){
+        HttpSession session=request.getSession();
+        session.removeAttribute(YLBKEY.USER_SESSION);
+        session.invalidate();
+
+        return "redirect:/index";
+    }
+
+    @ResponseBody
+    @GetMapping("/user/account")
+    public Result<BigDecimal> account(HttpSession session){
+        Result<BigDecimal> result=Result.fail();
+        User user= (User) session.getAttribute(YLBKEY.USER_SESSION);
+        if(user!=null){
+            FinanceAccount account=accountService.queryAccountMoney(user.getId());
+            if(account!=null){
+                result=Result.ok();
+                result.setData(account.getAvailableMoney());
+            }
+        }else{
+            result=Result.erro(ResponseCode.USER_LOGIN_ERR);
+        }
+
+
+        return result;
     }
 
 }

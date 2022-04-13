@@ -21,6 +21,26 @@ public class User implements Serializable {
 
     private String headerImage;
 
+    private String login_ip;
+
+    public String getLogin_ip() {
+        return login_ip;
+    }
+
+    public void setLogin_ip(String login_ip) {
+        this.login_ip = login_ip;
+    }
+
+    public String getLogin_device() {
+        return login_device;
+    }
+
+    public void setLogin_device(String login_device) {
+        this.login_device = login_device;
+    }
+
+    private String login_device;
+
     public Integer getId() {
         return id;
     }
@@ -71,6 +91,22 @@ public class User implements Serializable {
 
     public Date getLastLoginTime() {
         return lastLoginTime;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", phone='" + phone + '\'' +
+                ", loginPassword='" + loginPassword + '\'' +
+                ", name='" + name + '\'' +
+                ", idCard='" + idCard + '\'' +
+                ", addTime=" + addTime +
+                ", lastLoginTime=" + lastLoginTime +
+                ", headerImage='" + headerImage + '\'' +
+                ", login_ip='" + login_ip + '\'' +
+                ", login_device='" + login_device + '\'' +
+                '}';
     }
 
     public void setLastLoginTime(Date lastLoginTime) {

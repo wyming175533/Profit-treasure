@@ -1,6 +1,7 @@
 package com.bjpowernode.microweb.Controller;
 
 import com.bjpowernode.Util.RedisOpreation;
+import com.bjpowernode.api.service.AccountService;
 import com.bjpowernode.microweb.Service.HelpService;
 import com.bjpowernode.api.service.InvestService;
 import com.bjpowernode.api.service.ProductService;
@@ -20,5 +21,7 @@ public class BaseController {
     protected ProductService productService;
     @Resource
     protected RedisOpreation redisOpreation;
+    @DubboReference(interfaceClass = AccountService.class,version = "1.0")
+    protected AccountService accountService;
 }
 

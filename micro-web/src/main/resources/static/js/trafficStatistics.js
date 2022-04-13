@@ -86,6 +86,17 @@ $(function(){
 	});
 	//个人信息下拉
 	$(".logged").hover(function(){
+		$.get(contextPath+"/user/account",null,function (resp){
+			if(resp.result){
+				$("#frame_top").text(resp.data);
+			}else{
+				alert(resp.msg)
+			}
+		},"json")
+
+
+
+
 		$(this).addClass("logged-hover");
 		$(".userinfo-drop-down",this).stop().animate({ height: '205px'},300);
 	},function(){

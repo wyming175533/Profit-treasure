@@ -57,6 +57,10 @@ public class RedisOpreation {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.opsForValue().set(key,value,minute, TimeUnit.MINUTES);
     }
+    public void setKey(String key, Object value){
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.opsForValue().set(key,value);
+    }
 
     /**
      * @param key 字符串型
@@ -68,7 +72,17 @@ public class RedisOpreation {
     public void setStringKey(String key,String value,long minute){
         stringRedisTemplate.opsForValue().set(key,value,minute,TimeUnit.MINUTES);
     }
+    public void setStringKey(String key,String value){
+        stringRedisTemplate.opsForValue().set(key,value);
+    }
 
 
+    /**
+     * @param key 被删除的无效信息的key
+     */
+    public void deleteRedisKey(String key) {
+        stringRedisTemplate.delete(key);
+
+    }
 }
 

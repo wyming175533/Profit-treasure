@@ -7,6 +7,24 @@
 <body>
    <script th:inline="javascript">
     var contextPath=[[${#request.getContextPath()}]];
+
+    $(function (){
+        $(".btn-login").on("click",function (){
+            window.location.href=contextPath+"/user/login?returnUrl="+window.location.href;
+
+        })
+
+
+
+
+
+
+
+
+
+    })
+
+
   </script>
 </body>
 </html>

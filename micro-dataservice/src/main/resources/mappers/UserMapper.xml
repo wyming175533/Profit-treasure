@@ -9,10 +9,11 @@
     <result column="id_card" jdbcType="VARCHAR" property="idCard" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+    <result column="login_device" jdbcType="VARCHAR" property="login_device" />
     <result column="header_image" jdbcType="VARCHAR" property="headerImage" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, phone, login_password, name, id_card, add_time, last_login_time, header_image
+    id, phone, login_password, name, id_card, add_time, last_login_time, header_image,login_ip,login_device
   </sql>
 <!--  自定义mapper的开始-->
   <select id="selectRegisterCount" resultType="java.lang.Integer">
@@ -25,8 +26,8 @@
   </select>
 
   <insert id="insertUserSelectID">
-    insert into u_user(phone,login_password,add_time)values (
-    #{phone},#{loginPassword},#{addTime})
+    insert into u_user(phone,login_password,add_time,login_ip,login_device)values (
+    #{phone},#{loginPassword},#{addTime},#{login_ip},#{login_device})
     <selectKey keyColumn="newId" keyProperty="id" resultType="int" order="AFTER">
       select last_insert_id() as newId
     </selectKey>

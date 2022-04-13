@@ -1,5 +1,8 @@
 package com.bjpowernode.microweb.Controller;
 
+import com.bjpowernode.Consts.YLBKEY;
+import com.bjpowernode.api.po.FinanceAccount;
+import com.bjpowernode.api.po.User;
 import com.bjpowernode.vo.PageVo;
 import com.bjpowernode.Util.YLBUtil;
 import com.bjpowernode.api.model.InvestInfo;
@@ -10,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +57,9 @@ public class ProductController extends BaseController {
      * @return 投资详情页
      */
     @GetMapping("/product/productInfo")
-    public String  productInfo(Model model,@RequestParam("id") Integer id,
-                               @RequestParam(required = false,defaultValue = "1")Integer pageno) {
+    public String  productInfo(Model model, @RequestParam("id") Integer id,
+                               @RequestParam(required = false,defaultValue = "1")Integer pageno
+                                    , HttpSession session) {
         String mssg="内容没有找到";
         if(YLBUtil.ifNullZero(id)){
             model.addAttribute("mssg",mssg);
@@ -73,6 +78,11 @@ public class ProductController extends BaseController {
         List<InvestInfo> investList=investService.selectInvestInfo(product.getId(),pageno,YLB_PRODUCT_INVESTPAGESIZE);
         model.addAttribute("investList",investList);
 
+        User user= (User) session.getAttribute(YLBKEY.USER_SESSION);
+        if(user!=null){
+            FinanceAccount account= accountService.queryAccountMoney(user.getId());
+            model.addAttribute("availableMoney",account.getAvailableMoney());
+        }
         //@todo 右侧排行
 
         return "productInfo2";

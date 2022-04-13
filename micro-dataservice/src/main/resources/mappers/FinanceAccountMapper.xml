@@ -7,7 +7,7 @@
     <result column="available_money" jdbcType="DECIMAL" property="availableMoney" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, uid, available_money
+    id,uid,available_money
   </sql>
 <!--  自定义sql-->
 
@@ -18,7 +18,10 @@
     )
   </insert>
 
-
+  <select id="selectByUid" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+ from u_finance_account where uid=#{uid}
+  </select>
 
 
 
@@ -37,7 +40,9 @@
     from u_finance_account
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" >
+
+
+    <delete id="deleteByPrimaryKey" >
     delete from u_finance_account
     where id = #{id,jdbcType=INTEGER}
   </delete>

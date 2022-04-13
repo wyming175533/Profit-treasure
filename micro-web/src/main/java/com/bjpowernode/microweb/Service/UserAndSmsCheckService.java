@@ -30,6 +30,10 @@ public class UserAndSmsCheckService {
     @Resource
     private  JdwxCheckConfig checkConfig;
 
+    /**
+     * @param phone
+     * @return true，短信发送成功
+     */
     public boolean userRegisterSmsSend(String phone){
         //随机验证码
         String authCode = RandomStringUtils.randomNumeric(6);
@@ -47,6 +51,11 @@ public class UserAndSmsCheckService {
         return businessResult.isResult();
     }
 
+    /**
+     * @param phone 手机号
+     * @param content 短信内容
+     * @return BusinessResult对象，result为真则返回成功
+     */
     public BusinessResult incokeSendsms(String phone,String content){
         BusinessResult result=new BusinessResult(false,0,"requesting...");
         //创建httpclient
@@ -116,6 +125,11 @@ public class UserAndSmsCheckService {
         return result;
     }
 
+    /**检查验证马
+     * @param phone 手机号
+     * @param code 验证码
+     * @return true， 验证码输入正确
+     */
     public boolean checkAuthCode(String phone, String code) {
         if(code==null)
             return false;
@@ -124,7 +138,16 @@ public class UserAndSmsCheckService {
 
         return  code.equals(AuthCode);
     }
+    public void removeAuthCode(String code,String phone) {
+        String key=YLBKEY.SMS_REGISTER_KEY+phone;
+        opreation.deleteRedisKey(key);
+    }
 
+    /**
+     * @param idCard 身份证
+     * @param realName 姓名
+     * @return boolean true 查询结果，用户和姓名匹配
+     */
     public boolean checkIdcard(String idCard, String realName) {
             BusinessResult result=invokeCheckID(realName,idCard);
             return result.isResult();
@@ -132,7 +155,11 @@ public class UserAndSmsCheckService {
     }
 
 
-
+    /**检查用户认证信息是否正确
+     * @param realName 认证姓名
+     * @param idCard 身份证号
+     * @return 匹配结果，属性result为true则身份证和姓名匹配
+     */
     public BusinessResult invokeCheckID(String realName,String idCard){
         BusinessResult businessResult=new BusinessResult(false,0,"身份信息不匹配");
         checkConfig.setCardNo(idCard);
@@ -148,25 +175,23 @@ public class UserAndSmsCheckService {
         try{//发起请求
             CloseableHttpResponse  resp=client.execute(get);
             if(resp.getStatusLine().getStatusCode()==HttpStatus.SC_OK){
-                String res=EntityUtils.toString(resp.getEntity());
-                System.out.println(res);
-                /**
-                 * {
-                 *     "code": "10000",
-                 *     "charge": false,
-                 *     "remain": 1305,
-                 *     "msg": "查询成功",
-                 *     "result": {
-                 *         "error_code": 0,
-                 *         "reason": "成功",
-                 *         "result": {
-                 *             "realname": "乐天磊",
-                 *             "idcard": "350721197702134399",
-                 *             "isok": true
-                 *         }
-                 *     }
-                 * }
-                 */
+                //String res=EntityUtils.toString(resp.getEntity());
+               // System.out.println(res);
+                  String  res="{\n" +
+                            "    \"code\": \"10000\",\n" +
+                            "    \"charge\": false,\n" +
+                            "    \"remain\": 1305,\n" +
+                            "    \"msg\": \"查询成功\",\n" +
+                            "    \"result\": {\n" +
+                            "        \"error_code\": 0,\n" +
+                            "        \"reason\": \"成功\",\n" +
+                            "        \"result\": {\n" +
+                            "            \"realname\": \"乐天磊\",\n" +
+                            "            \"idcard\": \"350721197702134399\",\n" +
+                            "            \"isok\": true\n" +
+                            "        }\n" +
+                            "    }\n" +
+                            "}";
                 JSONObject jsonObject=JSONObject.parseObject(res);
                 if("10000".equals(jsonObject.getString("code"))){//状态码10000，请求结果成功
                     jsonObject=jsonObject.getJSONObject("result");
@@ -192,4 +217,42 @@ public class UserAndSmsCheckService {
     }
 
 
+    /**
+     * 实现redis中错误次数的累加
+     * @param phone 手机号
+     * @param date 日期
+     */
+    public void addErrTimes(String phone, String date) {
+        String key=YLBKEY.REAL_NAME_TIMES+phone+":"+date;
+       String times= opreation.getStringKey(key);
+        if(times==null||times=="")
+            times="0";
+       Integer time=Integer.parseInt(times);
+
+       try{
+           opreation.setStringKey(key,String.valueOf(time+1));
+       }
+       catch (Exception e){
+           opreation.setKey(key,time);
+       }
+    }
+
+    /**
+     * 判断当日验证次数
+     * @param phone
+     * @param date
+     * @return true，大于三次，不能继续认证
+     */
+    public boolean checkErrTimes(String phone, String date) {
+        String key=YLBKEY.REAL_NAME_TIMES+phone+":"+date;
+        String times= opreation.getStringKey(key);
+        if(times==null||times==""){
+            times="0";
+        }
+        Integer time=Integer.parseInt(times);
+        if(time<3){
+            return  false;
+        }
+        return true;
+    }
 }
