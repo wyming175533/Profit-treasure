@@ -22,6 +22,16 @@ public class RechargeRecord implements Serializable {
 
     private String channel;
 
+    private Integer action;
+
+    public Integer getAction() {
+        return action;
+    }
+
+    public void setAction(Integer action) {
+        this.action = action;
+    }
+
     public Integer getId() {
         return id;
     }

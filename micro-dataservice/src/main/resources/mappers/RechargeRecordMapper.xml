@@ -10,11 +10,37 @@
     <result column="recharge_time" jdbcType="TIMESTAMP" property="rechargeTime" />
     <result column="recharge_desc" jdbcType="VARCHAR" property="rechargeDesc" />
     <result column="channel" jdbcType="VARCHAR" property="channel" />
+    <result column="action" jdbcType="INTEGER" property="action" />
   </resultMap>
   <sql id="Base_Column_List">
     id, uid, recharge_no, recharge_status, recharge_money, recharge_time, recharge_desc, 
-    channel
+    channel,`action`
   </sql>
+
+
+<!--自定义sql  -->
+
+  <!--分页查询充值记录-->
+  <select id="selectByUserId" resultMap="BaseResultMap">
+      SELECT
+        recharge_desc,
+        recharge_money,
+        recharge_status,
+        recharge_time,
+        `action`
+      FROM
+          b_recharge_record
+      WHERE
+          uid = #{userId}
+      ORDER BY id DESC
+      LIMIT #{offSet},  #{rows}
+  </select>
+
+  <!--总记录数-->
+  <select id="selectCountRechargeNumByUserId" resultType="java.lang.Integer">
+     select count(id) as ct from b_recharge_record where uid=#{userId}
+  </select>
+<!--  自定义sql-->
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

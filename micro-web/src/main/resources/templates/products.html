@@ -65,16 +65,16 @@
 				<a id="linkHomePage"     href="javascript:void(0)">首页</a>
 				<a id="linkPreviousPage" href="javascript:void(0)">上一页</a>
 			</span>
-				<span th:if="${page.PageNO>1}">
+				<span th:if="${page.pageNO>1}">
 					<a id="linkHomePage" th:href="@{/product/show(ptype=${type},pageno=1)}">首页</a>
 					<a id="linkPreviousPage" th:href="@{/product/show(ptype=${type},pageno=${page.pageNO-1})}">上一页</a>
 				</span>
-				<span th:if="${page.PageNO==page.pageTotal}">
+				<span th:if="${page.pageNO==page.pageTotal}">
 					<a id="linkNextPage"  href="javascript:void(0)">下一页 </a>
 					<a id="linkLastPage"  href="javascript:void(0)">尾页</a>
 				</span>
 
-				<span th:if="${page.PageNO < page.pageTotal}">
+				<span th:if="${page.pageNO < page.pageTotal}">
 				<a id="linkNextPage" th:href="@{/product/show(ptype=${type},pageno=${page.pageNO+1})}">下一页 </a>
 				<a id="linkLastPage" th:href="@{/product/show(ptype=${type},pageno=${page.pageTotal})}">尾页</a>
 				</span>

@@ -6,6 +6,7 @@ import com.bjpowernode.Util.YLBUtil;
 import com.bjpowernode.api.model.MyInvestVo;
 import com.bjpowernode.api.model.ServiceResult;
 import com.bjpowernode.api.po.FinanceAccount;
+import com.bjpowernode.api.po.RechargeRecord;
 import com.bjpowernode.api.po.User;
 import com.bjpowernode.api.service.UserService;
 import com.bjpowernode.code.ResponseCode;
@@ -92,6 +93,11 @@ public class UserController extends BaseController {
 
             List<MyInvestVo> listVo=investService.selectMyInvestByUid(user.getId(),1, YLBConsts.YLB_PRODUCT_INVESTPAGESIZE);
             model.addAttribute("myInvest",listVo);//获取用户投资列表
+
+            //最近的5条充值记录
+            List<RechargeRecord> rechargeList = rechargeService.queryByUserId(user.getId(),1,5);
+            model.addAttribute("rechargeList",rechargeList);
+
 
 
 
