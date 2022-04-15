@@ -12,7 +12,7 @@ spring:
     host: 192.168.17.129
     port: 6379
 
-#    dubbo
+#    dubbo  记录一处错误，zookeeper正常启动，但是项目启动时候会导致正常退出，无法连接，原因尽然是d盘可用空间为0
 dubbo:
   registry:
     address: zookeeper://localhost:2181

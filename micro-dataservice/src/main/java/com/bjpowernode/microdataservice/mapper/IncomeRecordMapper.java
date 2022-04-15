@@ -1,5 +1,6 @@
 package com.bjpowernode.microdataservice.mapper;
 
+import com.bjpowernode.api.model.IncomeVo;
 import com.bjpowernode.api.model.InvestInfo;
 import com.bjpowernode.api.po.BidInfo;
 import com.bjpowernode.api.po.IncomeRecord;
@@ -21,4 +22,7 @@ public interface IncomeRecordMapper {
 
     int updateByPrimaryKey(IncomeRecord record);
 
+    List<IncomeVo> selectIncomeInfo(Integer uid,  Integer offset,Integer pageSize);
+
+    Integer selectIncomeRecordsByUid(Integer uid);
 }

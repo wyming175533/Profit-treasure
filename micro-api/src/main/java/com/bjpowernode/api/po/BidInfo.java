@@ -8,7 +8,7 @@ public class BidInfo implements Serializable {
     private static final long serialVersionUID = -1041108312243481202L;
     private Integer id;
 
-    private Integer loanId;
+    private Integer productId;
 
     private Integer uid;
 
@@ -26,12 +26,12 @@ public class BidInfo implements Serializable {
         this.id = id;
     }
 
-    public Integer getLoanId() {
-        return loanId;
+    public Integer getProductId() {
+        return productId;
     }
 
-    public void setLoanId(Integer loanId) {
-        this.loanId = loanId;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
     public Integer getUid() {

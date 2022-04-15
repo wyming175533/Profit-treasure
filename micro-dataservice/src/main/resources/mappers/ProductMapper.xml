@@ -36,6 +36,10 @@
     select count(id) from b_product_info where product_type=#{ProductType}
   </select>
 
+  <update id="updateProductMoney">
+    update b_product_info set  left_product_money= left_product_money-#{bidMoney}
+    where id=#{productId} and(left_product_money-#{bidMoney}>=0)
+  </update>
 
 
 

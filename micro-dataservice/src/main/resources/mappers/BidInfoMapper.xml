@@ -78,14 +78,18 @@
     delete from b_bid_info
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
+
   <insert id="insert" >
-    insert into b_bid_info (id, loan_id, uid, 
+    insert into b_bid_info (id, pid, uid,
       bid_money, bid_time, bid_status
       )
-    values (#{id,jdbcType=INTEGER}, #{loanId,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER},
       #{bidMoney,jdbcType=DECIMAL}, #{bidTime,jdbcType=TIMESTAMP}, #{bidStatus,jdbcType=INTEGER}
       )
   </insert>
+
+
   <insert id="insertSelective" >
     insert into b_bid_info
     <trim prefix="(" suffix=")" suffixOverrides=",">

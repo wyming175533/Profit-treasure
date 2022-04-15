@@ -11,6 +11,20 @@
     <result column="income_money" jdbcType="DECIMAL" property="incomeMoney" />
     <result column="income_status" jdbcType="INTEGER" property="incomeStatus" />
   </resultMap>
+  <resultMap id="IncomeVo" type="com.bjpowernode.api.model.IncomeVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="prod_id" jdbcType="INTEGER" property="prodId" />
+    <result column="bid_id" jdbcType="INTEGER" property="bidId" />
+    <result column="bid_money" jdbcType="DECIMAL" property="bidMoney" />
+    <result column="income_date" jdbcType="DATE" property="incomeDate" />
+    <result column="income_money" jdbcType="DECIMAL" property="incomeMoney" />
+    <result column="income_status" jdbcType="INTEGER" property="incomeStatus" />
+    <result column="product_name" jdbcType="INTEGER" property="productName" />
+
+  </resultMap>
+
+
   <sql id="Base_Column_List">
     id, uid, prod_id, bid_id, bid_money, income_date, income_money, income_status
   </sql>
@@ -19,10 +33,33 @@
    select sum(bid_money) from b_income_record
   </select>
 
+<!--查询收入记录-->
+  <select id="selectIncomeInfo" resultMap="IncomeVo">
+SELECT
+	i.income_date,
+	i.income_money,
+	i.bid_money,
+	i.income_status,
+	p.product_name
+FROM
+	b_income_record i
+JOIN b_product_info p ON i.prod_id = p.id
+WHERE
+	i.uid = #{uid}
+ORDER BY
+	income_date DESC
+LIMIT #{offset},#{pageSize}
+  </select>
 
-
-
-
+<!--查询收入总数-->
+  <select id="selectIncomeRecordsByUid" resultType="java.lang.Integer">
+    SELECT
+	count(id)
+FROM
+	b_income_record
+WHERE
+	uid = #{uid}
+  </select>
 
 
 
@@ -55,7 +92,8 @@
   </select>
 
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from b_income_record
     where id = #{id,jdbcType=INTEGER}
   </delete>

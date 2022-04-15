@@ -112,7 +112,7 @@
 	            	<!-- 判断用户是否登录：未登录，显示登录连接 -->
 	            	<span style="font-size:18px;color:#ff6161;vertical-align:bottom;" th:if="${session.loginUser==null}"><a href="javascript:void(0)" class="btn-login">请登录</a></span>
 	        
-	            	<!-- 判断用户是否登录：已登录，显示可用余额 -->‘’‘
+	            	<!-- 判断用户是否登录：已登录，显示可用余额 -->
 
 	           		<span style="font-size:18px;color:#ff6161;vertical-align:bottom;" th:if="${session.loginUser!=null}">
                       [[${availableMoney}]] 元
@@ -151,10 +151,104 @@
 <!--投资成功浮层end-->
 
 <!--页脚start-->
-<jsp:include page="commons/footer.jsp"/>
+<div th:include="commons/footer :: html"></div>
 <!--页脚end-->
 
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
+  let minMoney = [[${view.bidMinLimit}]]; //最小下限
+  let maxMoney = [[${view.bidMaxLimit}]]; //最大上限
+  let leftMoney = [[${view.leftProductMoney}]]; //剩余可投金额
+  let rate = [[${view.prate}]];//利率
+  let cycle = [[${view.pcycle}]]; //周期
+  let ptype = [[${view.productType}]];//类型
+  let productId = [[${view.id}]]; //id
+
+  let loginUser=[[${session.loginUser}]];
+  let realName=[[${session.loginUser?.name}]]
+  let accountMoney=[[${availableMoney}]]
+
+
+  //投资金额失去焦点
+  function  checkMoney(){
+    let tip=$(".max-invest-money");//错误信息
+    let money=$.trim($("#bidMoney").val());//用户输入金额
+
+    if(money===undefined || money==null ||money==""){
+      tip.text("请输入投资金额");
+    }else if(isNaN(money)){
+      tip.text("请输入整数");
+    }else if(parseInt(money)%100!=0){
+      tip.text("请输入100的整数倍")
+    }else if(parseInt(money)<100){
+      tip.text("投资最小金额是100元")
+    }else if(parseInt(money)<parseInt(minMoney)){
+      tip.text("不能小于该产品的最小金额"+minMoney)
+    }else if( parseInt(money) > parseInt(maxMoney)){
+      tip.text("投资金额不能大于"+maxMoney);
+    } else if( parseInt(money) > parseInt(leftMoney)){
+      tip.text("投资金额不能大于"+leftMoney);
+    } else {
+      tip.text("");
+      let income = 0;
+      if (ptype == 0)//新手宝，周期为天
+      {
+        income = parseInt(money) * (parseFloat(rate) / 100 / 360)  * parseInt(cycle);
+      } else {  // 周期是月
+        alert(ptype)
+        income = parseInt(money) * (parseFloat(rate) / 100 / 360) * (parseInt(cycle) * 30);
+      }
+      $("#shouyi").text(parseInt(money)+parseFloat(income.toFixed(2)));
+      }
+
+    }
+
+function invest(){
+    checkMoney();
+    if($(".max-invest-money").text()==""){
+      let bidMoney=$.trim($("#bidMoney").val());
+      if(loginUser==null){
+        alert("请先登录");
+      }else if(realName==null)
+      {alert("请先实名");}
+      else  if(accountMoney==null || parseFloat(accountMoney)<parseInt(bidMoney)){
+        alert("资金不足，请先充值")
+      }else{
+        //可以投资，投资记录表，用户表，资金账户表
+        $.ajax({
+          url:contextPath+"/invest/product",
+          type:"post",
+          dataType:"json",
+          data:{
+            productId:productId,
+            bidMoney:bidMoney
+          },
+          success:function (resp){
+            if(resp.result){
+              alert("投资成功！");
+
+            }else{
+              alert(resp.msg)
+            }
+
+          },
+          error:function (resp){
+            alert("请稍后重试")
+          }
+
+
+        })
+
+
+
+      }
+
+
+
+    }
+
+
+}
+
 function closeit() {
 	$("#failurePayment").hide();
 	$("#dialog-overlay1").hide();

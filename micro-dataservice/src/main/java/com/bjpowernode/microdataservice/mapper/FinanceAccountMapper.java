@@ -2,6 +2,8 @@ package com.bjpowernode.microdataservice.mapper;
 
 import com.bjpowernode.api.po.FinanceAccount;
 
+import java.math.BigDecimal;
+
 public interface FinanceAccountMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -18,4 +20,8 @@ public interface FinanceAccountMapper {
     void insertUidAndMoney(FinanceAccount financeAccount);
 
     FinanceAccount selectByUid(Integer uid);
+
+    FinanceAccount selectAccountByUIdForUpDate(Integer uid);
+
+    int updateAccountMoney(Integer uid, BigDecimal bidMoney);
 }

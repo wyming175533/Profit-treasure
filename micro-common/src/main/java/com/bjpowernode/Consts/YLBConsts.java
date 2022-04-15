@@ -10,4 +10,14 @@ public class YLBConsts {
     public static  final  Integer YLB_PRODUCT_PAGESIZE=9;
     //***************************默认投资记录每页大小*************
     public  static final Integer YLB_PRODUCT_INVESTPAGESIZE=5;
+
+
+    //**************************用户投资操作中的错误码***********************
+    public  static final Integer PARAM_ERR=30001;
+    public  static final Integer USER_ACCOUNT_NOTHAVE=30002;
+    public  static final Integer USER_ACCOUNT_NOTMONEY=30005;
+
+
+
+    public static final Integer BID_MONEY_ERR =30003 ;
 }

@@ -1,6 +1,28 @@
 package com.bjpowernode.Util;
 
+import java.math.BigDecimal;
+
 public class YLBUtil {
+
+    /** 金额比较
+     * @param big1 用户剩余金额
+     * @param big2 投资金额
+     * @return true 用户金额大于投资金额，可投资
+     */
+    public static boolean CompareBigMoney(BigDecimal big1,BigDecimal big2){
+        boolean res=false;
+        if(big1!=null && big2!=null){
+
+            return  big1.compareTo(big2)>=0;
+        }else {
+            throw  new RuntimeException("BigDecimal数据为空！");
+        }
+
+    }
+
+
+
+
     public static Integer PageNO(Integer PageNO){
 
         if(PageNO==null||PageNO<1){

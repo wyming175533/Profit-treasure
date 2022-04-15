@@ -24,9 +24,18 @@
   </select>
 
 
+  <select id="selectAccountByUIdForUpDate" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from u_finance_account where uid=#{uid}
+    for update
 
+  </select>
 
-
+<!--//更新金额-->
+  <update id="updateAccountMoney">
+    update  u_finance_account set available_money=available_money-#{bidMoney}
+    where uid=#{uid} and (available_money-#{bidMoney}>=0)
+  </update>
 
 
 
@@ -90,10 +99,11 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" >
+    <update id="updateByPrimaryKey" >
     update u_finance_account
     set uid = #{uid,jdbcType=INTEGER},
       available_money = #{availableMoney,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
 </mapper>

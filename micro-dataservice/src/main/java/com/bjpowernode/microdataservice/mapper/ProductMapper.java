@@ -9,8 +9,8 @@ import java.util.List;
 public interface ProductMapper {
     /**
      * @param ProductType 产品类型
-     * @param offset 分页起始值（掠过）
-     * @param rows 行数
+     * @param offset      分页起始值（掠过）
+     * @param rows        行数
      * @return 产品集合
      */
     List<Product> selectListByType(@Param("ProductType") Integer ProductType,
@@ -18,6 +18,7 @@ public interface ProductMapper {
                                    @Param("rows") Integer rows);
 
     BigDecimal selectCompetAvgRate();
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(Product record);
@@ -31,4 +32,7 @@ public interface ProductMapper {
     int updateByPrimaryKey(Product record);
 
     Integer selectRecordsCount(Integer ptype);
+
+    int updateProductMoney(Integer productId, BigDecimal bidMoney);
+
 }
