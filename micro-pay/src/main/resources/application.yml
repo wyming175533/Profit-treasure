@@ -1,0 +1,27 @@
+server:
+  port: 9000
+  servlet:
+    context-path: /pay
+#拒绝连接，无更多消息，可能是没有配置redis，因为redis不是采用的默认方案
+spring:
+  application:
+    name: micro-pay
+  thymeleaf:
+    cache: false
+  redis:
+    host: 192.168.17.129
+    port: 6379
+
+dubbo:
+  registry:
+    address: zookeeper://localhost:2181
+  scan:
+    base-packages: com.bjpowernode.pay
+  consumer:
+    check: false
+    timeout: 10000
+    retries: 0
+kq:
+  config:
+    merchant: 1001214035601
+    bgUrl: http://47.113.198.114:9999/pay/kq/notify

@@ -3,11 +3,13 @@ package com.bjpowernode.microweb.Controller;
 import com.bjpowernode.Consts.YLBKEY;
 import com.bjpowernode.api.po.FinanceAccount;
 import com.bjpowernode.api.po.User;
+import com.bjpowernode.microweb.view.InvestTopBean;
 import com.bjpowernode.vo.PageVo;
 import com.bjpowernode.Util.YLBUtil;
 import com.bjpowernode.api.model.InvestInfo;
 import com.bjpowernode.api.po.Product;
 import com.bjpowernode.microweb.view.ProductView;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static com.bjpowernode.Consts.YLBConsts.YLB_PRODUCT_INVESTPAGESIZE;
 import static com.bjpowernode.Consts.YLBConsts.YLB_PRODUCT_PAGESIZE;
@@ -48,6 +51,16 @@ public class ProductController extends BaseController {
         model.addAttribute("page",pageVo);
         model.addAttribute("type",ptype);
         //@todo 计算排名
+        List<InvestTopBean> list=new ArrayList<>();
+        Set<ZSetOperations.TypedTuple<String>> typedTuples = redisOpreation.reverseRangeZSet(YLBKEY.INVEST_TOP_ORDER, 0, 4);
+        typedTuples.forEach(
+                zset->{
+                    list.add(new InvestTopBean(zset.getValue(),zset.getScore()));
+                }
+        );
+        model.addAttribute("topList",list);
+
+
         return "products";
     }
 

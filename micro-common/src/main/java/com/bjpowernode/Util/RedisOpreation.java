@@ -1,12 +1,12 @@
 package com.bjpowernode.Util;
 
 import com.bjpowernode.Consts.YLBKEY;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class RedisOpreation {
@@ -17,6 +17,38 @@ public class RedisOpreation {
         this.stringRedisTemplate = stringRedisTemplate;
         this.redisTemplate = redisTemplate;
     }
+
+    /**
+     * @param key 自增加一
+     * @return
+     */
+    public long incre(String key){
+
+        return stringRedisTemplate.opsForValue().increment(key);
+    }
+
+    /**累加score
+     * @param key  redis key
+     * @param value redis value key值
+     * @param score redis score 排序依据
+     */
+    public void incrScoreZSet(String key,String value,Double score){
+        ZSetOperations<String, String> zset = stringRedisTemplate.opsForZSet();
+        zset.incrementScore(key,value,score);
+
+    }
+
+    //反向排序，获取索引范围的数据
+    public Set<ZSetOperations.TypedTuple<String>> reverseRangeZSet(String key,int begin,int end){
+        Set<ZSetOperations.TypedTuple<String>> typedTuples = stringRedisTemplate.opsForZSet().reverseRangeWithScores(key, begin, end);
+        return typedTuples;
+
+    }
+
+
+
+
+
 
 
     /**
@@ -83,6 +115,15 @@ public class RedisOpreation {
     public void deleteRedisKey(String key) {
         stringRedisTemplate.delete(key);
 
+    }
+
+    /**订单号添加到zset集合中去
+     * @param rechargeNoList
+     * @param rechargeNo
+     * @param time
+     */
+    public void zset(String rechargeNoList, String rechargeNo, long time) {
+        stringRedisTemplate.opsForZSet().add(rechargeNoList,rechargeNo,time);
     }
 }
 

@@ -186,7 +186,7 @@
     }else if( parseInt(money) > parseInt(maxMoney)){
       tip.text("投资金额不能大于"+maxMoney);
     } else if( parseInt(money) > parseInt(leftMoney)){
-      tip.text("投资金额不能大于"+leftMoney);
+      tip.text("剩余可投资金额不足"+leftMoney);
     } else {
       tip.text("");
       let income = 0;
@@ -194,7 +194,6 @@
       {
         income = parseInt(money) * (parseFloat(rate) / 100 / 360)  * parseInt(cycle);
       } else {  // 周期是月
-        alert(ptype)
         income = parseInt(money) * (parseFloat(rate) / 100 / 360) * (parseInt(cycle) * 30);
       }
       $("#shouyi").text(parseInt(money)+parseFloat(income.toFixed(2)));
@@ -225,6 +224,7 @@ function invest(){
           success:function (resp){
             if(resp.result){
               alert("投资成功！");
+              window.location.href=location.href;
 
             }else{
               alert(resp.msg)

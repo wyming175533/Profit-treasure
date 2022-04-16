@@ -39,4 +39,14 @@ public class RechargeServiceImpl implements RechargeService {
         }
         return countNums;
     }
+
+    @Override
+    public boolean insertRechargeReord(RechargeRecord rechargeRecord) {
+        if(rechargeRecord!=null) {
+            int rows = rechargeRecordMapper.insert(rechargeRecord);
+            if (rows > 0)
+                return true;
+        }
+        return false;
+    }
 }

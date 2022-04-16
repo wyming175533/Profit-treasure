@@ -91,6 +91,7 @@ $(function(){
 				$("#frame_top").text(resp.data);
 			}else{
 				alert(resp.msg)
+				window.location.href=window.location.href;
 			}
 		},"json")
 

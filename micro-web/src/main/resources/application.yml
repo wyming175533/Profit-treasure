@@ -31,3 +31,9 @@ jdwx:
   check:
       url: https://way.jd.com/youhuoBeijing/test
       appkey: f4ccfaca5a3f31e4f2007902e83e9208
+
+#支付服务的地址
+micro:
+  pay:
+    url: http://localhost:9000/pay/apply/rechargeNo
+    receaction: http://localhost:9000/pay/kq/receweb

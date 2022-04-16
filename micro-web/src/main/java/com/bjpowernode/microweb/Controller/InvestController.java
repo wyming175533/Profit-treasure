@@ -59,6 +59,10 @@ public class InvestController extends BaseController{
             ServiceResult serviceResult=investService.invest(user.getId(),productId,bidMoney);
             if(serviceResult.isResult()){
                 result=Result.ok();
+                redisOpreation.incrScoreZSet(YLBKEY.INVEST_TOP_ORDER,user.getPhone(),bidMoney.doubleValue());
+
+
+
             }else{
                 result.setMsg(serviceResult.getMsg());
             }

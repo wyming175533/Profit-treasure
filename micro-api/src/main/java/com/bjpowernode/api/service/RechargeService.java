@@ -21,4 +21,6 @@ public interface RechargeService {
      * @return
      */
     Integer queryCountByUserId(Integer userId);
+
+    boolean insertRechargeReord(RechargeRecord rechargeRecord);
 }
