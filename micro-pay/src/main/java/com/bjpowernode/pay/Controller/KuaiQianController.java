@@ -1,6 +1,7 @@
 package com.bjpowernode.pay.Controller;
 
 import com.bjpowernode.Consts.YLBKEY;
+import com.bjpowernode.api.model.ServiceResult;
 import com.bjpowernode.api.po.RechargeRecord;
 import com.bjpowernode.api.service.RechargeService;
 import com.bjpowernode.pay.Service.KuaiQianService;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Map;
 
 @Controller
@@ -76,6 +79,40 @@ public String receRequestFromWeb(@RequestParam("rechargeMoney") BigDecimal money
 }
 
 
+    //接收快钱的异步通知
+    @GetMapping("/kq/notify")
+    @ResponseBody
+    public String kqNotify(HttpServletRequest request){
+        System.out.println("接收快钱的异步通知");
+        StringBuilder builder = new StringBuilder();
+        Enumeration<String> names = request.getParameterNames();
+        while(names.hasMoreElements()){ //枚举的遍历
+            String name  = names.nextElement();
+            String value  = request.getParameter(name);
+            builder.append(name).append("=").append(value).append("&");
+
+        }
+        System.out.println("参数："+builder.toString());
+
+        ServiceResult result=kuaiQianService.handlerNotif(request);
+        kuaiQianService.removeOrderFromRedis(request.getParameter("orderId"));
+
+        //用户中心页面（外围地址）
+        return "<result>1</result><redirecturl>http://43.129.246.251:7410/ylb/user/myCenter</redirecturl>";
+    }
+
+    @ResponseBody
+    @GetMapping("/kq/query")
+    public Result<String> kqQuery(String rechargeNo){
+        Result<String> result=Result.fail();
+
+        ServiceResult serviceResult=kuaiQianService.handlerQuery(rechargeNo);
+        if(serviceResult.isResult()){
+            result=Result.ok();
+        }
+
+        return result;
+    }
 
 
 }

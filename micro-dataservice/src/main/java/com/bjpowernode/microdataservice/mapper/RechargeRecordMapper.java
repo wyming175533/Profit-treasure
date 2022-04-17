@@ -25,4 +25,10 @@ public interface RechargeRecordMapper {
     int updateByPrimaryKeySelective(RechargeRecord record);
 
     int updateByPrimaryKey(RechargeRecord record);
+
+    RechargeRecord selectByRechargeNo(String orderId);
+
+    int updateRecharge(Integer id, Integer rechargeStatusRecharged);
+
+    int updateRechargeByOrderId(String orderId, Integer rechargeStatusRechargeerr);
 }

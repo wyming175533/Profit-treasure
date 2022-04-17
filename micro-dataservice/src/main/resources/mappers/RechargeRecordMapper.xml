@@ -40,7 +40,30 @@
   <select id="selectCountRechargeNumByUserId" resultType="java.lang.Integer">
      select count(id) as ct from b_recharge_record where uid=#{userId}
   </select>
-<!--  自定义sql-->
+
+  <select id="selectByRechargeNo" resultMap="BaseResultMap">
+    select  <include refid="Base_Column_List"></include>
+    from b_recharge_record
+    where recharge_no=#{orderId}
+    for update
+
+  </select>
+
+<!--更改充值记录状态-->
+  <update id="updateRecharge">
+    update  b_recharge_record
+    set recharge_status=#{rechargeStatusRecharged}
+    where id=#{id}
+  </update>
+
+<!--通过订单号修改状态-->
+  <update id="updateRechargeByOrderId">
+      update  b_recharge_record
+    set recharge_status=#{rechargeStatusRechargeerr}
+    where recharge_no=#{orderId}
+  </update>
+
+  <!--  自定义sql-->
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -54,16 +77,19 @@
   <insert id="insert" >
     insert into b_recharge_record (id, uid, recharge_no, 
       recharge_status, recharge_money, recharge_time, 
-      recharge_desc, channel)
+      recharge_desc, channel,`action`)
     values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{rechargeNo,jdbcType=VARCHAR}, 
       #{rechargeStatus,jdbcType=INTEGER}, #{rechargeMoney,jdbcType=DECIMAL}, #{rechargeTime,jdbcType=TIMESTAMP}, 
-      #{rechargeDesc,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR})
+      #{rechargeDesc,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR},#{action})
   </insert>
   <insert id="insertSelective" >
     insert into b_recharge_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="action!=null">
+        `action`,
       </if>
       <if test="uid != null">
         uid,
@@ -90,6 +116,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
+      </if>
+      <if test="action!=null">
+        #{action},
       </if>
       <if test="uid != null">
         #{uid,jdbcType=INTEGER},
@@ -152,4 +181,6 @@
       channel = #{channel,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
 </mapper>

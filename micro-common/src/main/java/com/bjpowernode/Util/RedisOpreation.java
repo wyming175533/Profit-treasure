@@ -125,5 +125,9 @@ public class RedisOpreation {
     public void zset(String rechargeNoList, String rechargeNo, long time) {
         stringRedisTemplate.opsForZSet().add(rechargeNoList,rechargeNo,time);
     }
+
+    public void removeValueforZset(String rechargeNoList, String orderId) {
+        stringRedisTemplate.opsForZSet().remove(rechargeNoList,orderId);
+    }
 }
 

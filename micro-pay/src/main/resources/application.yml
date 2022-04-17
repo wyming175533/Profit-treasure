@@ -24,4 +24,4 @@ dubbo:
 kq:
   config:
     merchant: 1001214035601
-    bgUrl: http://47.113.198.114:9999/pay/kq/notify
+    bgUrl: http://43.129.246.251:7420/pay/kq/notify

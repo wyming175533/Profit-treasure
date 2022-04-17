@@ -131,7 +131,7 @@
                                 <input type="hidden" name="userId" th:value="${session.loginUser.id}" />
                                 <input type="hidden" name="rechargeNo" id="rechargeNo" th:value="${rechargeNo}">
                                 <button id="action_1" type="button" onclick="submitForm()">支&nbsp;&nbsp;付</button>
-                                <input type="hidden" name="phone" th:value="${session.loginUser.phone}" />
+                                <input type="hidden" name="phone" value="17630510216" />
 
                             </div>
                             <div class="tips">
@@ -156,13 +156,13 @@
 <!--支付start-->
 <div class="layer-body failureSuccess failurePayment" id="failurePayment"
      style="display:none;width:500px;height:380px;top:65%;">
-    <a class="layer-close" th:href="@{/loan/page/toRecharge}"></a>
+    <a class="layer-close" th:href="@{/recharge/toRecharge}"></a>
     <div class="layer-top" style="background:#3cbe9b;height:105px;">支付</div>
     <div class="layerBottom">
         <div class="txt-cnt">请在新打开的页面上完成支付，<br/>由于第三方支付渠道问题，所以偶尔存在到账延迟的情况<br/>如没有及时到账，请您等候几分钟或联系客服 400-880-0000。</div>
         <div class="failureClose clearfix">
-            <a class="fl" th:href="@{/loan/page/toRecharge}">支付遇到问题<br/>重新支付</a>
-            <a class="fr" th:href="@{/loan/page/myCenter}">支付完成</a>
+            <a class="fl" th:href="@{/recharge/toRecharge}">支付遇到问题<br/>重新支付</a>
+            <a class="fr" th:href="@{/user/myCenter}">支付完成</a>
         </div>
     </div>
 </div>

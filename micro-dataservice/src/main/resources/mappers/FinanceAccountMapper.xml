@@ -37,7 +37,11 @@
     where uid=#{uid} and (available_money-#{bidMoney}>=0)
   </update>
 
-
+<!--充值对应的更新金额-->
+  <update id="updateAccountMoneyInc">
+    update  u_finance_account set available_money=available_money+#{rechargeMoney}
+    where uid=#{uid}
+  </update>
 
 
 

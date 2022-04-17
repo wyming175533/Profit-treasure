@@ -20,6 +20,7 @@ public class ServiceResult implements Serializable {
     }
 
     public ServiceResult() {
+
     }
 
     public ServiceResult(boolean result) {

@@ -42,7 +42,7 @@ public class Pkipair {
         boolean flag = false;
         try {
 
-            String file = Pkipair.class.getResource("CFCA_sandbox.cer").toURI().getPath();//99bill[1].cert.rsa.20140803.cer
+            String file = Pkipair.class.getResource("99bill[1].cert.rsa.20140803.cer").toURI().getPath();//99bill[1].cert.rsa.20140803.cer
             System.out.println(file);                       //  99bill.cert.rsa.20140803.cer
             FileInputStream inStream = new FileInputStream(file);
 
