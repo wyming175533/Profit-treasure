@@ -67,7 +67,7 @@ public class RechargeServiceImpl implements RechargeService {
     RechargeRecord recharge=rechargeRecordMapper.selectByRechargeNo(orderId);
     if(recharge!=null){
         //判断记录状态,只对未进行处理的订单进行处理（状态为0充值中）
-        if(recharge.getRechargeStatus()== YLBKEY.RECHARGE_STATUS_RECHARGEING){
+        if(recharge.getRechargeStatus()!= YLBKEY.RECHARGE_STATUS_RECHARGED){
             //判断金额是否相等
             String fen=recharge.getRechargeMoney().multiply(new BigDecimal(100)).
                     stripTrailingZeros().toPlainString();//分专元，去掉小数部分的0
@@ -99,12 +99,6 @@ public class RechargeServiceImpl implements RechargeService {
 
             }
         }
-        else if(recharge.getRechargeStatus()== YLBKEY.RECHARGE_STATUS_RECHARGED){
-            result.setResult(true);
-        }else{
-            result.setResult(false);
-            result.setMsg("重值失败");
-        }
     }
 
         return result;
@@ -116,6 +110,13 @@ public class RechargeServiceImpl implements RechargeService {
         if(rows<0){
             throw  new RuntimeException("订单状态修改出错");
         }
+    }
+
+    @Override
+    public RechargeRecord queryByRechargeNo(String rechargeNo) {
+        RechargeRecord re= rechargeRecordMapper.selectByRechargeNo(rechargeNo);
+        return re;
+
     }
 
 

@@ -35,5 +35,5 @@ jdwx:
 #支付服务的地址
 micro:
   pay:
-    url: http://localhost:9000/pay/apply/rechargeNo
-    receaction: http://localhost:9000/pay/kq/receweb
+    url: http://43.129.246.251:7420/pay/apply/rechargeNo
+    receaction: http://43.129.246.251:7420/pay/kq/receweb

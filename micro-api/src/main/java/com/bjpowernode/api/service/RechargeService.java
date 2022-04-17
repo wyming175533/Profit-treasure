@@ -32,5 +32,8 @@ public interface RechargeService {
      * @param rechargeStatusRechargeerr 订单状态，失败
      */
     void modifyRechargeStatus(String orderId, Integer rechargeStatusRechargeerr);
+
+    RechargeRecord queryByRechargeNo(String rechargeNo);
+
 }
 

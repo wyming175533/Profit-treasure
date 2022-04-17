@@ -43,9 +43,47 @@ public class RechargeController extends BaseController {
     model.addAttribute("rechargeNo",rechargeNo);
 
 
+
         return "toRecharge";
     }
+    @GetMapping("/recharge/query")
+    public String queryOrderId(String rechargeNo){
+        String view="forward:/recharge/page/toRecharge";
+        boolean flag=false;
+        //访问本地数据库查看充值结果
+        RechargeRecord recharge=rechargeService.queryByRechargeNo(rechargeNo);
+        if(recharge!=null){
+            int status=recharge.getRechargeStatus();
+            if(status==YLBKEY.RECHARGE_STATUS_RECHARGED){
+                view="forward:/user/myCenter";
+                flag=true;
+            }
+            else if(status == YLBKEY.RECHARGE_STATUS_RECHARGEERR){
+                view="forward:/recharge/page/toRecharge";
+            } else if( status == YLBKEY.RECHARGE_STATUS_RECHARGEING) {
+                //没有充值结果，调用快钱查询接口
+                String url="http://43.129.246.251:7420/pay/kq/query?rechargeNo="+rechargeNo;
+                try{
+                    //{"result":false,"code":0,"msg":"未知错误","data":""}
+                    String json = HttpClientUtils.doGet(url);
+                    JSONObject jsonObject = JSONObject.parseObject(json);
+                    if( jsonObject.getBoolean("result")){
+                        view = "forward:/user/myCenter";
+                        flag=true;
+                    } else {
+                        view="forward:/recharge/toRecharge";
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
 
+        }
+        System.out.println(view);
+
+
+        return view;
+        }
 
 
 
