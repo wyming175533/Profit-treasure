@@ -35,4 +35,6 @@ public interface ProductMapper {
 
     int updateProductMoney(Integer productId, BigDecimal bidMoney);
 
+    List<Product> selectByStatus(Integer productStatusFull);
+
 }

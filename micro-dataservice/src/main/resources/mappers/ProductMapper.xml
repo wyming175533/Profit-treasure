@@ -42,6 +42,17 @@
   </update>
 
 
+  <select id="selectByStatus" resultMap="BaseResultMap">
+SELECT
+	<include refid="Base_Column_List"></include>
+FROM
+	b_product_info
+WHERE
+	product_status = 1
+AND DATE(product_full_time) = DATE_SUB(CURDATE(), INTERVAL 1 DAY);
+
+
+  </select>
 
 
 
@@ -59,7 +70,7 @@
   </select>
 
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from b_product_info
     where id = #{id,jdbcType=INTEGER}
   </delete>

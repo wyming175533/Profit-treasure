@@ -26,4 +26,5 @@ public interface BidInfoMapper {
 
     Integer selectInvestRecordByUid(Integer uid);
 
+    List<BidInfo> selectByProductId(Integer pid);
 }

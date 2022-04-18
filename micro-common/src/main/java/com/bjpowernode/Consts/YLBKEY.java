@@ -29,6 +29,13 @@ public class YLBKEY {
     public static final Integer RECHARGE_YES =1 ;
     //充值类型：提现
     public static final Integer RECHARGE_REMOVE =2 ;
+    //产品状态，1,已满表，2以产生收益计划
+    public static final Integer PRODUCT_STATUS_FULL =1;
+    public static final Integer PRODUCT_STATUS_EMPTY =0;
+    public static final Integer PRODUCT_STATUS_INCOMEING =2;
+    //收益计划状态，0未返还，1已返还
+    public static final Integer INCOME_STATUS_NORET = 0;
+    public static final Integer INCOME_STATUS_RET = 1;
     //redis中产品类型key
     public static String DIC_PRODUCT_KEY="DIC:PRODUCT:TYPE";
 }

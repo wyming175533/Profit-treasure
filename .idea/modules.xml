@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$USER_HOME$/Desktop/day21/代码/kqDemoWeb/kqDemoWeb.iml" filepath="$USER_HOME$/Desktop/day21/代码/kqDemoWeb/kqDemoWeb.iml" />
       <module fileurl="file://$PROJECT_DIR$/micro-api/micro-api.iml" filepath="$PROJECT_DIR$/micro-api/micro-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/micro-common/micro-common.iml" filepath="$PROJECT_DIR$/micro-common/micro-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/micro-dataservice/micro-dataservice.iml" filepath="$PROJECT_DIR$/micro-dataservice/micro-dataservice.iml" />
       <module fileurl="file://$PROJECT_DIR$/micro-parent/micro-parent.iml" filepath="$PROJECT_DIR$/micro-parent/micro-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/micro-pay/micro-pay.iml" filepath="$PROJECT_DIR$/micro-pay/micro-pay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/micro-timedtask/micro-timedtask.iml" filepath="$PROJECT_DIR$/micro-timedtask/micro-timedtask.iml" />
       <module fileurl="file://$PROJECT_DIR$/micro-web/micro-web.iml" filepath="$PROJECT_DIR$/micro-web/micro-web.iml" />
     </modules>
   </component>

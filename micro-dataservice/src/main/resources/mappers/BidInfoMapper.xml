@@ -23,14 +23,17 @@
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
 
   </resultMap>
-  <sql id="Base_Column_List">
+  <sql id="Base_Column_List2">
     bid.id, bid.pid, bid.uid, bid.bid_money, bid.bid_time, bid.bid_status
+  </sql>
+  <sql id="Base_Column_List">
+    id,pid,uid,bid_money,bid_time,bid_status
   </sql>
 <!--  自定义sql-->
 
   <select id="selectInvestInfo" resultMap="InvestMap">
     SELECT
-    <include refid="Base_Column_List"></include>,
+    <include refid="Base_Column_List2"></include>,
     INSERT (u.phone, 4, 6, "******") AS phone
     FROM
     b_bid_info bid
@@ -72,9 +75,17 @@
     from b_bid_info
     where id = #{id,jdbcType=INTEGER}
   </select>
+    <select id="selectByProductId" resultMap="BaseResultMap">
+    SELECT
+	<include refid="Base_Column_List"></include>
+    FROM
+	b_bid_info
+    WHERE
+	pid = #{pid};
+    </select>
 
 
-  <delete id="deleteByPrimaryKey" >
+    <delete id="deleteByPrimaryKey" >
     delete from b_bid_info
     where id = #{id,jdbcType=INTEGER}
   </delete>
