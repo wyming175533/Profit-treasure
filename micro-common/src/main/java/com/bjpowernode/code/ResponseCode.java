@@ -23,7 +23,8 @@ public enum ResponseCode {
 
     RNE_TIMES_ERR(601,"超出当日认证次数"),
 
-    USER_LOGIN_ERR(701,"请先登录");
+    USER_LOGIN_ERR(701,"请先登录"),
+    User_LOGIN_REQUEST(20000,"请登录");
 
 
 

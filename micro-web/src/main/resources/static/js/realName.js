@@ -50,6 +50,8 @@ $(function() {
 				success:function (resp){
 					if(resp.result){
 							window.location.href=contextPath+"/user/myCenter";
+					}else if(resp.code=20000){
+						window.location.href=contextPath+"user/login";
 					}
 					else {
 						alert(resp.msg);

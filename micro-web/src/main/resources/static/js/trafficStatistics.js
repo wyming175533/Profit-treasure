@@ -90,8 +90,8 @@ $(function(){
 			if(resp.result){
 				$("#frame_top").text(resp.data);
 			}else{
-				alert(resp.msg)
-				window.location.href=window.location.href;
+				alert("登录可能已经超时，请重新登录")
+				location.href=contextPath+"/user/login";
 			}
 		},"json")
 

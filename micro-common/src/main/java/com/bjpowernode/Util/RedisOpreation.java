@@ -135,5 +135,15 @@ public class RedisOpreation {
 
         return zsts;
     }
+
+    public Set<String> getStringKeys(String key) {
+        Set<String> keys = stringRedisTemplate.keys(key);
+        return keys;
+
+    }
+
+    public void removeStringByKeys(Set<String> set) {
+         long count=stringRedisTemplate.delete(set);
+    }
 }
 

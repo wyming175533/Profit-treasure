@@ -226,7 +226,10 @@ function invest(){
               alert("投资成功！");
               window.location.href=location.href;
 
-            }else{
+            }else if(resp.code=20000){
+              window.location.href=contextPath+"/user/login";
+            }
+            else{
               alert(resp.msg)
             }
 

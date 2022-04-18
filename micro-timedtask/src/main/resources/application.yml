@@ -16,4 +16,6 @@ dubbo:
 micro:
   pay:
     url: http://43.129.246.251:7420/pay/kq/task/query
+  real:
+    url: http://43.129.246.251:7420/remove/realName
 

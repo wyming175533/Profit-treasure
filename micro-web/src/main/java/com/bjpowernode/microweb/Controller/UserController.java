@@ -14,6 +14,7 @@ import com.bjpowernode.microweb.Service.UserAndSmsCheckService;
 import com.bjpowernode.vo.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class UserController extends BaseController {
@@ -77,6 +79,18 @@ public class UserController extends BaseController {
         model.addAttribute("phone",phone);
         return "realName";
     }
+
+    @ResponseBody
+    @GetMapping("/remove/realName")
+    public String RemoveRealName(){
+
+             String key=DateFormatUtils.format( DateUtils.addDays(new Date(),-1),"yyyyMMdd");
+             String RedisKey="RNT:*"+key;
+             Set<String> set=redisOpreation.getStringKeys(RedisKey);
+             redisOpreation.removeStringByKeys(set);
+        return "ok";
+    }
+
 
     /**跳转到个人中心/小金库
      * @param session session域

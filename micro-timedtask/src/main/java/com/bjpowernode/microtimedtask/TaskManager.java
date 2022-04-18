@@ -20,6 +20,9 @@ public class TaskManager {
     @Value("${micro.pay.url}")
     private String url;
 
+    @Value("${micro.real.url}")
+    private String url2;
+
     /**
      * 调用数据服务，更新收益计划
      */
@@ -52,5 +55,16 @@ public class TaskManager {
             e.printStackTrace();
         }
     }
+
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void RemoveRealName(){
+        System.out.println("定时任务，开始清空实名验证次数");
+        try {
+            HttpClientUtils.doGet(url2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
