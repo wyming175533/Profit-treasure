@@ -14,8 +14,6 @@ public class MicroTimedtaskApplication {
 
 		ApplicationContext ctx=SpringApplication.run(MicroTimedtaskApplication.class, args);
 		TaskManager taskManager= (TaskManager) ctx.getBean("taskManager");
-		taskManager.invokeIncome();
-
 	}
 
 }

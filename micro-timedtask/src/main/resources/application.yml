@@ -12,5 +12,8 @@ dubbo:
     check: false
     timeout: 30000
     retries: 0
-kq:
+
+micro:
+  pay:
+    url: http://43.129.246.251:7420/pay/kq/task/query
 

@@ -26,4 +26,6 @@ public interface FinanceAccountMapper {
     int updateAccountMoney(Integer uid, BigDecimal bidMoney);
 
     int updateAccountMoneyInc(Integer uid, BigDecimal rechargeMoney);
+
+    int updateAccountMoneyByIncomeBack(Integer uid, BigDecimal bidMoney, BigDecimal incomeMoney);
 }

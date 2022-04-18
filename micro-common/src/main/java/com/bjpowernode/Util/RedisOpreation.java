@@ -129,5 +129,11 @@ public class RedisOpreation {
     public void removeValueforZset(String rechargeNoList, String orderId) {
         stringRedisTemplate.opsForZSet().remove(rechargeNoList,orderId);
     }
+
+    public  Set<ZSetOperations.TypedTuple<String>>  getAllZSet(String key) {
+        Set<ZSetOperations.TypedTuple<String>> zsts=  stringRedisTemplate.opsForZSet().rangeWithScores(key,0,-1);
+
+        return zsts;
+    }
 }
 

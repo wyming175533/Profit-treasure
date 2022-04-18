@@ -114,5 +114,13 @@ public String receRequestFromWeb(@RequestParam("rechargeMoney") BigDecimal money
         return result;
     }
 
+    @ResponseBody
+    @GetMapping("/kq/task/query")
+    public String kqTaskQUery(){
+        System.out.println("kq/task/query.....");
+        kuaiQianService.handlerTaskQuery();
+        return  "ok";
+    }
+
 
 }

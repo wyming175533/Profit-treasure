@@ -43,7 +43,11 @@
     where uid=#{uid}
   </update>
 
-
+    <!--产品到期，收益返还-->
+    <update id="updateAccountMoneyByIncomeBack">
+     update u_finance_account  set available_money  = available_money + #{bidMoney} + #{incomeMoney}
+     where uid = #{uid}
+  </update>
 
 
 <!--  自定义sql-->
@@ -109,5 +113,6 @@
       available_money = #{availableMoney,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
 
 </mapper>

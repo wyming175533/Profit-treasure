@@ -11,6 +11,7 @@ import com.bjpowernode.pay.util.HttpUtil;
 import com.bjpowernode.pay.util.Pkipair;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import com.bjpowernode.pay.config.KqConfig;
 import javax.annotation.Resource;
@@ -19,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class KuaiQianService {
@@ -215,11 +217,11 @@ public String generateRechargeNo(String channel){
         merchantSignMsgVal = appendParam(merchantSignMsgVal, "payResult",payResult,null);
         merchantSignMsgVal = appendParam(merchantSignMsgVal, "aggregatePay",aggregatePay,null);
         merchantSignMsgVal = appendParam(merchantSignMsgVal, "errCode",errCode,null);
-        System.out.println("merchantSignMsgVal="+merchantSignMsgVal);
+     //   System.out.println("merchantSignMsgVal="+merchantSignMsgVal);
         Pkipair pki = new Pkipair();
         boolean flag=pki.enCodeByCer(merchantSignMsgVal,signMsg);
         //flag是验签结果，true是通过
-        System.out.println(flag+"--------------");
+       // System.out.println(flag+"--------------");
         if(flag){
             serviceResult=rechargeService.handlerKqNotify(orderId,payResult,payAmount);
         }else{
@@ -290,9 +292,10 @@ public String generateRechargeNo(String channel){
         try {
             response= HttpUtil.doPostJsonRequestByHttps(JSON.toJSONString(request),reqUrl,3000,8000);
             JSONObject jsonObject=JSONObject.parseObject(response);
+          //  System.out.println(jsonObject);
             if(jsonObject!=null){
                 Object orderDetail=jsonObject.get("orderDetail");
-                System.out.println(orderDetail);
+           //     System.out.println(orderDetail);
                 if(orderDetail!=null){
                     JSONArray array=jsonObject.getJSONArray("orderDetail");//获取接送数组
                     JSONObject order = (JSONObject) array.get(0);//第一个json对象
@@ -315,5 +318,31 @@ public String generateRechargeNo(String channel){
         }
 
 return  serviceResult;
+    }
+
+    public void handlerTaskQuery() {
+
+    //从redis中获取数据
+        Date curDate=new Date();
+        long durtionSecond=20*60*1000;
+        Set<ZSetOperations.TypedTuple<String>> allZSet = redisOpreation.getAllZSet(YLBKEY.RECHARGE_NO_LIST);
+        allZSet.forEach(
+                s->{
+                    String orderPlaceTime=new BigDecimal(s.getScore()).toPlainString();
+                    System.out.println(s.getValue());
+                    if(curDate.getTime()-Long.valueOf(orderPlaceTime)>=durtionSecond){
+                        handlerQuery(s.getValue());
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+        );
+
+
+
     }
 }

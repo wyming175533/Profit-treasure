@@ -25,4 +25,8 @@ public interface IncomeRecordMapper {
     List<IncomeVo> selectIncomeInfo(Integer uid,  Integer offset,Integer pageSize);
 
     Integer selectIncomeRecordsByUid(Integer uid);
+
+    List<IncomeRecord> selectExpireIncomeDate();
+
+    int updateStatus(Integer id, Integer newStatus);
 }

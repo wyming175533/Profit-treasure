@@ -9,6 +9,7 @@ import com.bjpowernode.api.po.IncomeRecord;
 import com.bjpowernode.api.po.Product;
 import com.bjpowernode.api.service.IncomeRecordService;
 import com.bjpowernode.microdataservice.mapper.BidInfoMapper;
+import com.bjpowernode.microdataservice.mapper.FinanceAccountMapper;
 import com.bjpowernode.microdataservice.mapper.IncomeRecordMapper;
 import com.bjpowernode.microdataservice.mapper.ProductMapper;
 import org.apache.commons.lang3.time.DateUtils;
@@ -31,6 +32,8 @@ public class IncomeRecordServiceImpl implements IncomeRecordService{
 
     @Resource
     private BidInfoMapper bidInfoMapper;
+    @Resource
+    private FinanceAccountMapper accountMapper;
     /**分页查询用户收益信息
      * @param uid
      * @param pageNo
@@ -106,6 +109,32 @@ public class IncomeRecordServiceImpl implements IncomeRecordService{
             int rows=productMapper.updateByPrimaryKeySelective(product);
             if(rows<1){
                 throw  new RuntimeException("生成收益计划，更新产品状态失败");
+            }
+        }
+
+    }
+
+
+
+    @Transactional
+    @Override
+    public void generateIncomeBack() {
+
+        //1.获取到期的产品数据。 查询income_record
+        List<IncomeRecord> incomeRecords = incomeRecordMapper.selectExpireIncomeDate();
+
+        int rows = 0;
+        for(IncomeRecord ir : incomeRecords){
+            //2.更新资金账户
+            rows =accountMapper.updateAccountMoneyByIncomeBack(ir.getUid(),ir.getBidMoney(),ir.getIncomeMoney());
+            if( rows < 1 ){
+                throw new RuntimeException("收益返还，更新资金余额失败");
+            }
+
+            //3.修改income_record的status=1
+            rows  = incomeRecordMapper.updateStatus(ir.getId(), YLBKEY.INCOME_STATUS_RET);
+            if( rows  < 1 ){
+                throw new RuntimeException("收益返还，更新收益表状态为1失败");
             }
         }
 

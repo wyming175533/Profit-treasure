@@ -64,6 +64,25 @@ WHERE
 
 
 
+  <!--查询到期的收益记录-->
+  <select id="selectExpireIncomeDate" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM
+    b_income_record
+    WHERE
+    income_date = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+    AND income_status = 0
+    ORDER BY id
+  </select>
+
+
+  <!--更新状态字段-->
+  <update id="updateStatus">
+    update  b_income_record set income_status = #{newStatus}
+    where id = #{id} and income_status = 0
+  </update>
+
 
 
 
@@ -198,4 +217,6 @@ WHERE
       income_status = #{incomeStatus,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
 </mapper>
